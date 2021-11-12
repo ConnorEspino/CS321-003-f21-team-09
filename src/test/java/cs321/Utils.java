@@ -9,8 +9,7 @@ import java.util.List;
 /**
  * Utils and Helper methods for Unit Tests
  */
-public class Utils
-{
+public class Utils {
     public static List<String> getLinesFromFile(String fileName) throws IOException
     {
         BufferedReader br=new BufferedReader(new FileReader(fileName));
