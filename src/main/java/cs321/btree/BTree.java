@@ -114,23 +114,23 @@ public class BTree<E> extends TreeObject<E>{
             v.parent = u.parent;
         }
     }
-
-    public void treeDelete(cs321.btree.TreeObject<E> newObject){
-        if(newObject.left == null) {
-            transplant(newObject, newObject.right);
-        } else if (newObject.right == null) {
-            transplant(newObject, newObject.left);
-        } else {
-            newObject.parent = treeMin(newObject.right);
-        }
-        if(newObject.parent.parent != newObject) {
-            transplant(newObject.parent, newObject.parent.right);
-        }
-        newObject.parent.right = newObject.right;
-        newObject.parent.right.parent = newObject.parent;
-        transplant(newObject, newObject.parent);
-        newObject.parent.left = newObject.left;
-        newObject.parent.left.parent = newObject.parent;
-    }
+//
+//    public void treeDelete(cs321.btree.TreeObject<E> newObject){
+//        if(newObject.left == null) {
+//            transplant(newObject, newObject.right);
+//        } else if (newObject.right == null) {
+//            transplant(newObject, newObject.left);
+//        } else {
+//            newObject.parent = treeMin(newObject.right);
+//        }
+//        if(newObject.parent.parent != newObject) {
+//            transplant(newObject.parent, newObject.parent.right);
+//        }
+//        newObject.parent.right = newObject.right;
+//        newObject.parent.right.parent = newObject.parent;
+//        transplant(newObject, newObject.parent);
+//        newObject.parent.left = newObject.left;
+//        newObject.parent.left.parent = newObject.parent;
+//    }
 
 }
