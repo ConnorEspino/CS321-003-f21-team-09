@@ -8,8 +8,7 @@ package cs321.create;
  * @author amit
  *
  */
-public class DNA
-{
+public class DNA {
     public static final int A = 0b00; // 0  Adenine
     public static final int T = 0b11; // 3  Thiamine
     public static final int C = 0b01; // 1  Cytosine
