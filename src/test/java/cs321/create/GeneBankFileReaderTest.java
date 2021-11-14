@@ -34,11 +34,13 @@ public class GeneBankFileReaderTest
     }
 
     //Tests for getNextSequence method below
-    @Test
-    public void InvalidDNAFile_ReturnNull() throws FileNotFoundException{
-        reader = new GeneBankFileReader("InvalidTestFile.txt", 2);
-        assertEquals(null, reader.getNextSequence());
-    }
+
+    // Determined to be unnecessary test since constructor checks for proper formatting of file
+    // @Test
+    // public void InvalidDNAFile_ReturnNull() throws FileNotFoundException{
+    //     reader = new GeneBankFileReader("InvalidTestFile.txt", 2);
+    //     assertEquals(null, reader.getNextSequence());
+    // }
 
     @Test
     public void ValidSequence_EndOfFile_ReturnNull() throws FileNotFoundException{
