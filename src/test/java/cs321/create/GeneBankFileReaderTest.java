@@ -5,7 +5,9 @@ import cs321.create.GeneBankFileReader;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.junit.Test;
 
@@ -20,6 +22,16 @@ public class GeneBankFileReaderTest
             reader = new GeneBankFileReader("Not a real file", 10);
         }catch(FileNotFoundException e){
             assert(true);
+        }
+    }
+
+    @Test
+    public void ExistentFile_newConstructor_expectNoException(){
+        try{
+            reader = new GeneBankFileReader("ValidTestFile.txt", 2);
+            assert(true);
+        }catch(FileNotFoundException e){
+            assert(false);
         }
     }
 
