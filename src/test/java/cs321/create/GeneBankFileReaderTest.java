@@ -33,6 +33,16 @@ public class GeneBankFileReaderTest
         }
     }
 
+    @Test
+    public void ImproperFile_newConstructor_InvalidFormatException() throws FileNotFoundException{
+        try{
+            reader = new GeneBankFileReader("src/test/java/cs321/create/InvalidTestFile.txt", 2);
+            assert(false);
+        }catch(InvalidFormatException e){
+            assert(true);
+        }
+    }
+
     //Tests for getNextSequence method below
 
     // Determined to be unnecessary test since constructor checks for proper formatting of file
@@ -50,7 +60,7 @@ public class GeneBankFileReaderTest
 
     @Test
     public void ValidSequence_getNextSequence_ReturnDNASequence(){
-        reader = new GeneBankFileReader("ValidTestFile.txt", 10);
+        reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFile.txt", 10);
         //TODO Update when DNASequence class gets implemented
         DNASequence seq = new DNASequence("GATCCTCCAT");
 
