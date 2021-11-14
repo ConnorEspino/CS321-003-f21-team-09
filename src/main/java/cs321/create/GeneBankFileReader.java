@@ -79,9 +79,10 @@ public class GeneBankFileReader {
 
     /**
      * Sets the length of each sequence to read from the file
+     * @param newLength The new sequence length
      */
-    public void setSequenceLength(){
-
+    public void setSequenceLength(int newLength){
+        seqLength = newLength;
     }
 
 }
