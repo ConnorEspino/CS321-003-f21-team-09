@@ -4,25 +4,28 @@ import cs321.create.GeneBankFileReader;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.FileNotFoundException;
+
 import org.junit.Test;
 
 public class GeneBankFileReaderTest
 {
-    private String[] args;
-    private GeneBankCreateBTreeArguments expectedConfiguration;
-    private GeneBankCreateBTreeArguments actualConfiguration;
+    private GeneBankFileReader reader;
 
     @Test
-    public void testName(){
-        // args = new String[4];
-        // args[0] = "0";
-        // args[1] = "20";
-        // args[2] = "fileNameGbk.gbk";
-        // args[3] = "13";
+    public void InvalidDNAFile_ReturnNull() throws FileNotFoundException{
+        reader = new GeneBankFileReader("InvalidTestFile.txt", 2);
+        assertEquals(null, reader.getNextSequence());
+    }
 
-        // expectedConfiguration = new GeneBankCreateBTreeArguments(false, 20, "fileNameGbk.gbk", 13, 0, 0);
-        // actualConfiguration = GeneBankCreateBTree.parseArguments(args);
-        // assertEquals(expectedConfiguration, actualConfiguration);
+    @Test
+    public void ValidSequence_EndOfFile_ReturnNull(){
+
+    }
+
+    @Test
+    public void ValidSequence_getNextSequence_ReturnDNASequence(){
+
     }
 
 }
