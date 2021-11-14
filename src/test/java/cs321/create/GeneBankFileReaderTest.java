@@ -73,4 +73,13 @@ public class GeneBankFileReaderTest
         reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFile.txt", 2);
         assertEquals(2, reader.getSequenceLength());
     }
+
+    //Tests for setSequenceLength method below
+    @Test
+    public void GeneBankFileReader_setSequenceLength_expectNoException() throws FileNotFoundException, InvalidFormatException{
+        reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFile.txt", 2);
+        reader.setSequenceLength(5);
+        
+        assertEquals(5, reader.getSequenceLength());
+    }
 }
