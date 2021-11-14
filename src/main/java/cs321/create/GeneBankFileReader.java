@@ -15,11 +15,27 @@ public class GeneBankFileReader {
      * @param readFile The name of the file to read from
      * @param length The length of each sequence to read from the file
      * @throws FileNotFoundException
+     * @throws InvalidFormatException
      */
-    public GeneBankFileReader(String readFile, int length) throws FileNotFoundException{
-        file = new File(readFile);
+    public GeneBankFileReader(String readFile, int length) throws FileNotFoundException, InvalidFormatException{
+
+        //Lets us place the file anywhere and not have any issues with relative directories
+        String filePath = new File(readFile).getAbsolutePath();
+
+        file = new File(filePath);
         scan = new Scanner(file);
-        //scan.useDelimiter("");
+
+        //Places the scanner at the start of the DNA Sequence
+        try{
+            while(!scan.nextLine().equals("ORIGIN      "));
+        }catch(NoSuchElementException e){
+            throw new InvalidFormatException("File is not formatted for DNA Sequence reading...");
+        }
+        
+        //Forces the scanner to go character by character
+        scan.useDelimiter("");
+
+        //Sets the sequence length
         seqLength = length;
     }
 
