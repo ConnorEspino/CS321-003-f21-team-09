@@ -15,7 +15,7 @@ public class GeneBankFileReaderTest
 
     //Tests for constructor below
     @Test
-    public void NonExistentFile_newConstructor_FileNotFoundException(){
+    public void NonExistentFile_newConstructor_FileNotFoundException() throws InvalidFormatException{
         try{
             reader = new GeneBankFileReader("Not a real file", 10);
         }catch(FileNotFoundException e){
@@ -24,9 +24,9 @@ public class GeneBankFileReaderTest
     }
 
     @Test
-    public void ExistentFile_newConstructor_expectNoException(){
+    public void ExistentFile_newConstructor_expectNoException() throws InvalidFormatException{
         try{
-            reader = new GeneBankFileReader("ValidTestFile.txt", 2);
+            reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFile.txt", 2);
             assert(true);
         }catch(FileNotFoundException e){
             assert(false);
