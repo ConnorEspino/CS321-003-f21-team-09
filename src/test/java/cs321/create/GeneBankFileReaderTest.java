@@ -26,7 +26,11 @@ public class GeneBankFileReaderTest
 
     @Test
     public void ValidSequence_getNextSequence_ReturnDNASequence(){
+        reader = new GeneBankFileReader("ValidTestFile.txt", 10);
+        //TODO Update when DNASequence class gets implemented
+        DNASequence seq = new DNASequence("GATCCTCCAT");
         
+        assertEquials(seq, reader.getNextSequence());
     }
 
 }
