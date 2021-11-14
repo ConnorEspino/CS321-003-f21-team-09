@@ -3,6 +3,7 @@ package cs321.create;
 import cs321.create.GeneBankFileReader;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
 
@@ -12,6 +13,17 @@ public class GeneBankFileReaderTest
 {
     private GeneBankFileReader reader;
 
+    //Tests for constructor below
+    @Test
+    public void NonExistentFile_newConstructor_FileNotFoundException(){
+        try{
+            reader = new GeneBankFileReader("Not a real file", 10);
+        }catch(FileNotFoundException e){
+            assert(true);
+        }
+    }
+
+    //Tests for getNextSequence method below
     @Test
     public void InvalidDNAFile_ReturnNull() throws FileNotFoundException{
         reader = new GeneBankFileReader("InvalidTestFile.txt", 2);
@@ -29,7 +41,7 @@ public class GeneBankFileReaderTest
         reader = new GeneBankFileReader("ValidTestFile.txt", 10);
         //TODO Update when DNASequence class gets implemented
         DNASequence seq = new DNASequence("GATCCTCCAT");
-        
+
         assertEquials(seq, reader.getNextSequence());
     }
 
