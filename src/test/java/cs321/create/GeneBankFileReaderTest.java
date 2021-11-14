@@ -19,13 +19,14 @@ public class GeneBankFileReaderTest
     }
 
     @Test
-    public void ValidSequence_EndOfFile_ReturnNull(){
-
+    public void ValidSequence_EndOfFile_ReturnNull() throws FileNotFoundException{
+        reader = new GeneBankFileReader("ValidTestFileShort.txt", 200);
+        assertEquals(null, reader.getNextSequence());
     }
 
     @Test
     public void ValidSequence_getNextSequence_ReturnDNASequence(){
-
+        
     }
 
 }
