@@ -74,7 +74,7 @@ public class GeneBankFileReader {
      * @return int The length of each sequence being read from the file
      */
     public int getSequenceLength(){
-        return -1;
+        return seqLength;
     }
 
     /**
