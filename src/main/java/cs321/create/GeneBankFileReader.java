@@ -17,7 +17,7 @@ public class GeneBankFileReader {
      * @throws FileNotFoundException
      * @throws InvalidFormatException
      */
-    public GeneBankFileReader(String readFile, int length) throws FileNotFoundException, InvalidFormatException{
+    public GeneBankFileReader(String readFile, int length) throws FileNotFoundException, GeneBankFileException{
 
         //Lets us place the file anywhere and not have any issues with relative directories
         String filePath = new File(readFile).getAbsolutePath();
@@ -29,7 +29,7 @@ public class GeneBankFileReader {
         try{
             while(!scan.nextLine().equals("ORIGIN      "));
         }catch(NoSuchElementException e){
-            throw new InvalidFormatException("File is not formatted for DNA Sequence reading...");
+            throw new GeneBankFileException("File is not formatted for DNA Sequence reading...");
         }
         
         //Forces the scanner to go character by character
