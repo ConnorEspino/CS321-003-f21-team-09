@@ -16,7 +16,7 @@ public class DNASequence {
      * @param sequence - DNA sequence (string) to input
      */
     public DNASequence(String sequence) {
-        list = new int[sequence.length()];
+        list = new int[sequence.length()-1];
         for (int i = 0; i < sequence.length(); i++) {
             switch (sequence.charAt(i)) {
                 case 'A':
@@ -100,6 +100,27 @@ public class DNASequence {
         }
 
         return ret;
+    }
+
+    /**
+     * Compares two DNASequence objects, to see if they are equal.
+     * 
+     * @param otherList - The list to compare to.
+     * @return boolean - True or false depending on the results of the given objects.
+     */
+    public boolean equals(DNASequence otherList) {
+
+        if (this.getSize() != otherList.getSize()) {
+            return false;
+        }
+
+        for (int i = 0; i < this.getSize(); i++) {
+            if (this.get(i) != otherList.get(i)) {
+                return false;
+            }
+        }
+
+        return true;
     }
     
 }
