@@ -65,7 +65,7 @@ public class GeneBankFileReader {
 
             build.append(next);
         }
-        return(new DNASequence(build.toString()));
+        return(new DNASequence(build.toString().toUpperCase()));
     }
 
     /**
