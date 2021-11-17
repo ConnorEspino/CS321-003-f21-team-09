@@ -16,7 +16,6 @@ public class DNASequence {
      * @param sequence - DNA sequence (string) to input
      */
     public DNASequence(String sequence) {
-        list = new int[sequence.length()];
         for (int i = 0; i < sequence.length(); i++) {
             switch (sequence.charAt(i)) {
                 case 'A':
@@ -46,12 +45,78 @@ public class DNASequence {
     }
 
     /**
+     * Sets the first int of the sequence to a new value.
+     * 
+     * @param newChar - New value to add (must be A, T, C, or G).
+     * @return int - Returns zero on success, non-zero on fail.
+     */
+    public int setFirst(char newChar) {
+        int ret;
+
+        switch (newChar) {
+            case 'A':
+                list[0] = (DNA.A);
+                ret = 0;
+            break;
+            case 'T':
+                list[0] = (DNA.T);
+                ret = 0;
+            break;
+            case 'C':
+                list[0] = (DNA.C);
+                ret = 0;
+            break;
+            case 'G':
+                list[0] = (DNA.G);
+                ret = 0;
+            break;
+            default:
+                ret = 1;
+        }
+
+        return ret;
+    }
+
+    /**
      * Returns the last int in the sequence.
      * 
      * @return int - The last int in the list. 
      */
     public int getLast() {
         return list[size-1];
+    }
+
+    /**
+     * Sets the last int of the sequence to a new value.
+     * 
+     * @param newChar - New value to add (must be A, T, C, or G).
+     * @return int - Returns zero on success, non-zero on fail.
+     */
+    public int setLast(char newChar) {
+        int ret;
+
+        switch (newChar) {
+            case 'A':
+                list[size-1] = (DNA.A);
+                ret = 0;
+            break;
+            case 'T':
+                list[size-1] = (DNA.T);
+                ret = 0;
+            break;
+            case 'C':
+                list[size-1] = (DNA.C);
+                ret = 0;
+            break;
+            case 'G':
+                list[size-1] = (DNA.G);
+                ret = 0;
+            break;
+            default:
+                ret = 1;
+        }
+
+        return ret;
     }
 
     /**
@@ -62,6 +127,40 @@ public class DNASequence {
      */
     public int get(int index) {
         return list[index];
+    }
+
+    /**
+     * Sets the specified int of the sequence to a new value.
+     * 
+     * @param i - Index of value to replace.
+     * @param newChar - New value to add (must be A, T, C, or G).
+     * @return int - Returns zero on success, non-zero on fail.
+     */
+    public int set(int i, char newChar) {
+        int ret;
+
+        switch (newChar) {
+            case 'A':
+                list[i] = (DNA.A);
+                ret = 0;
+            break;
+            case 'T':
+                list[i] = (DNA.T);
+                ret = 0;
+            break;
+            case 'C':
+                list[i] = (DNA.C);
+                ret = 0;
+            break;
+            case 'G':
+                list[i] = (DNA.G);
+                ret = 0;
+            break;
+            default:
+                ret = 1;
+        }
+
+        return ret;
     }
 
     /**
