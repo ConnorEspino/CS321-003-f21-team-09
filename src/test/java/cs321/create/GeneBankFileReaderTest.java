@@ -1,9 +1,6 @@
 package cs321.create;
 
-import cs321.create.GeneBankFileReader;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
 
