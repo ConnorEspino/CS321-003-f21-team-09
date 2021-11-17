@@ -66,7 +66,7 @@ public class GeneBankFileReader {
             build.append(next);
         }
         //TODO Update once DNASequence Class is done
-        return(new DNASequence(build));
+        return(new DNASequence(build.toString()));
     }
 
     /**
