@@ -81,7 +81,7 @@ public class DNASequence {
      * @return String - The current DNA sequence in String form.
      */
     public String toString() {
-        String ret = null;
+        String ret = "";
         for (int i = 0; i < list.length; i++) {
             switch (list[i]) {
                 case 0b00:
