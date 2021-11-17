@@ -19,5 +19,11 @@ public class TreeObject<E> {
         return key;
     }
 
+    public boolean equals(TreeObject<E> obj){
+        if(this.getKey() == obj.getKey()) {
+            return true;
+        }
+        return false;
+    }
 
 }
