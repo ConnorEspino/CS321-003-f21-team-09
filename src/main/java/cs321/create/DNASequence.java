@@ -16,7 +16,7 @@ public class DNASequence {
      * @param sequence - DNA sequence (string) to input
      */
     public DNASequence(String sequence) {
-        list = new int[sequence.length()-1];
+        list = new int[sequence.length()];
         for (int i = 0; i < sequence.length(); i++) {
             switch (sequence.charAt(i)) {
                 case 'A':
