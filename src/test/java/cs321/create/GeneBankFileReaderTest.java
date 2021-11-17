@@ -54,16 +54,14 @@ public class GeneBankFileReaderTest
 
     @Test
     public void ValidSequence_EndOfFile_ReturnNull() throws FileNotFoundException, GeneBankFileException{
-        reader = new GeneBankFileReader("ValidTestFileShort.txt", 200);
+        reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFileShort.txt", 200);
         assertEquals(null, reader.getNextSequence());
     }
 
     @Test
-    public void ValidSequence_getNextSequence_ReturnDNASequence(){
+    public void ValidSequence_getNextSequence_ReturnDNASequence() throws FileNotFoundException, GeneBankFileException{
         reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFile.txt", 10);
-        //TODO Update when DNASequence class gets implemented
         DNASequence seq = new DNASequence("GATCCTCCAT");
-
         assertEquals(seq, reader.getNextSequence());
     }
 
