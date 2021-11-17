@@ -14,6 +14,11 @@ public class BTree<E> extends TreeObject<E>{
         return root;
     }
 
+    public boolean isLeaf() {
+        boolean leaf = false;
+        return leaf;
+    }
+
     public void inOrderTreeWalk(TreeObject<E> TreeObject){
         if (TreeObject != null) {
             inOrderTreeWalk(TreeObject.left);
