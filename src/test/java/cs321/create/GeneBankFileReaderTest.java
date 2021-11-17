@@ -62,7 +62,7 @@ public class GeneBankFileReaderTest
     public void ValidSequence_getNextSequence_ReturnDNASequence() throws FileNotFoundException, GeneBankFileException{
         reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFile.txt", 10);
         DNASequence seq = new DNASequence("GATCCTCCAT");
-        assertEquals(seq, reader.getNextSequence());
+        assert(seq.equals(reader.getNextSequence()));
     }
 
     //Tests for getSequenceLength method below
