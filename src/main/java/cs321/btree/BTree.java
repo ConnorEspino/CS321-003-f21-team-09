@@ -2,24 +2,36 @@ package cs321.btree;
 //Test
 public class BTree<E> extends TreeObject<E>{
     private cs321.btree.TreeObject<E>[] BTree;
+    int size = 100;
 
     public BTree(int key1, int pos1) {
         super(key1, pos1);
-        int size = 100;
         BTree = new TreeObject[size];
     }
 
-    public TreeObject<E> getRoot() {
+    public cs321.btree.TreeObject<E>[] expandCap() {
+        size *= 2;
+        cs321.btree.TreeObject<E>[] BTreeCopy = new TreeObject[size];;
+        for(int i = 0; i < size/2; i++){
+            BTreeCopy[i] = BTree[i];
+        }
+        return BTreeCopy;
+    }
+
+    public cs321.btree.TreeObject<E> root() {
         TreeObject<E> root = BTree[0];
         return root;
     }
 
-    public boolean isLeaf() {
+    public boolean isLeaf(cs321.btree.TreeObject<E> TreeObject) {
         boolean leaf = false;
+        if(TreeObject.left == null && TreeObject.right == null){
+            leaf = true;
+        }
         return leaf;
     }
 
-    public void inOrderTreeWalk(TreeObject<E> TreeObject){
+    public void inOrderTreeWalk(cs321.btree.TreeObject<E> TreeObject){
         if (TreeObject != null) {
             inOrderTreeWalk(TreeObject.left);
             System.out.println(TreeObject.getKey());
@@ -29,8 +41,7 @@ public class BTree<E> extends TreeObject<E>{
 
     public cs321.btree.TreeObject<E> treeSearch(cs321.btree.TreeObject<E> TreeObject,int newKey){
         if(TreeObject == null | TreeObject.key ==newKey) {
-            //return TreeObject;
-            return null;
+            return TreeObject;
         }
         if (TreeObject.key < newKey) {
             return treeSearch(TreeObject.left, newKey);
@@ -88,7 +99,7 @@ public class BTree<E> extends TreeObject<E>{
     }
     public void treeInsert(cs321.btree.TreeObject<E> NewObject){
         TreeObject<E> newParent = null;
-        TreeObject<E> root = getRoot();
+        TreeObject<E> root = root();
         while(root != null) {
             newParent = root;
             if (NewObject.key < root.key) {
