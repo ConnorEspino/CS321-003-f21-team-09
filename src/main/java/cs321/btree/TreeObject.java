@@ -1,13 +1,15 @@
 package cs321.btree;
 
+import java.util.Objects;
+
 public class TreeObject<E> {
-    int key;
+    E key;
     int pos;
     public TreeObject<E> left;
     public TreeObject<E> right;
     public TreeObject<E> parent;
 
-    public TreeObject(int key1, int pos1) {
+    public TreeObject(E key1, int pos1) {
         key = key1;
         pos = pos1;
         left = null;
@@ -15,15 +17,21 @@ public class TreeObject<E> {
         parent = null;
     }
 
-    public int getKey() {
-        return key;
+    public E getKey(){
+        return this.key;
     }
 
-    public boolean equals(TreeObject<E> obj){
-        if(this.getKey() == obj.getKey()) {
-            return true;
-        }
-        return false;
+    public int equal(E o) {
+        if (this.key.hashCode() == o.hashCode()) return 0;
+        if (o.hashCode() > this.key.hashCode()) return -1;
+        if (o.hashCode() < this.key.hashCode()) return 1;
+        return 0;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key);
+    }
+
 
 }
