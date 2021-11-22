@@ -4,7 +4,7 @@ public class BTree<E> extends TreeObject<E>{
     private cs321.btree.TreeObject<E>[] BTree;
     int size = 100;
 
-    public BTree(int key1, int pos1) {
+    public BTree(E key1, int pos1) {
         super(key1, pos1);
         BTree = new TreeObject[size];
     }
@@ -39,19 +39,20 @@ public class BTree<E> extends TreeObject<E>{
         }
     }
 
-    public cs321.btree.TreeObject<E> treeSearch(cs321.btree.TreeObject<E> TreeObject,int newKey){
-        if(TreeObject == null | TreeObject.key ==newKey) {
+    public cs321.btree.TreeObject<E> treeSearch(cs321.btree.TreeObject<E> TreeObject,E newKey){
+        if(TreeObject == null | TreeObject.equal(newKey) == 0) {
             return TreeObject;
         }
-        if (TreeObject.key < newKey) {
+//        if (TreeObject.key < newKey) {
+        if (TreeObject.equal(newKey) > 0) {
             return treeSearch(TreeObject.left, newKey);
         } else {
             return treeSearch(TreeObject.right, newKey);
         }
     }
-    public cs321.btree.TreeObject<E> IterativeTreeSearch(cs321.btree.TreeObject<E> TreeObject, int newKey){
+    public cs321.btree.TreeObject<E> IterativeTreeSearch(cs321.btree.TreeObject<E> TreeObject, E newKey){
         while(TreeObject != null && TreeObject.key != newKey) {
-            if (TreeObject.getKey() < newKey) {
+            if (TreeObject.equal(newKey) < 0) {
                 TreeObject = TreeObject.left;
             } else {
                 TreeObject = TreeObject.right;
@@ -102,16 +103,18 @@ public class BTree<E> extends TreeObject<E>{
         TreeObject<E> root = root();
         while(root != null) {
             newParent = root;
-            if (NewObject.key < root.key) {
-                root = root.left;
-            } else {
-                root = root.right;
-            }
+//          if (NewObject.key < root.key) {
+            if (NewObject.equal(root.key) < 0) {
+                    root = root.left;
+                } else {
+                    root = root.right;
+                }
         }
         NewObject.parent = newParent;
         if(newParent == null) {
             BTree[0] = NewObject;
-        } else if(NewObject.key < newParent.key){
+//      } else if(NewObject.key < newParent.key){
+        } else if(NewObject.equal(newParent.key) < 0){
             newParent.left = NewObject;
         } else {
             newParent.right = NewObject;
