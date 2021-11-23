@@ -2,16 +2,18 @@ package cs321.btree;
 //Test
 public class BTree<E> extends TreeObject<E>{
     private cs321.btree.TreeObject<E>[] BTree;
-    int size = 100;
+    int cap = 100;
+    int size;
 
     public BTree(E key1, int pos1) {
         super(key1, pos1);
-        BTree = new TreeObject[size];
+        BTree = new TreeObject[cap];
+        size = 0;
     }
 
     public cs321.btree.TreeObject<E>[] expandCap() {
         size *= 2;
-        cs321.btree.TreeObject<E>[] BTreeCopy = new TreeObject[size];;
+        cs321.btree.TreeObject<E>[] BTreeCopy = new TreeObject[cap];;
         for(int i = 0; i < size/2; i++){
             BTreeCopy[i] = BTree[i];
         }
@@ -101,6 +103,9 @@ public class BTree<E> extends TreeObject<E>{
     public void treeInsert(cs321.btree.TreeObject<E> NewObject){
         TreeObject<E> newParent = null;
         TreeObject<E> root = root();
+        if(BTree.length >= size-1){
+            BTree = expandCap();
+        }
         while(root != null) {
             newParent = root;
 //          if (NewObject.key < root.key) {
@@ -109,6 +114,7 @@ public class BTree<E> extends TreeObject<E>{
                 } else {
                     root = root.right;
                 }
+            size++;
         }
         NewObject.parent = newParent;
         if(newParent == null) {
@@ -150,6 +156,7 @@ public class BTree<E> extends TreeObject<E>{
         transplant(newObject, newObject.parent);
         newObject.parent.left = newObject.left;
         newObject.parent.left.parent = newObject.parent;
+        size--;
     }
 
 }
