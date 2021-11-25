@@ -45,4 +45,12 @@ public class TreeObjectTest {
 
         assertEquals(-1, obj1.equals(obj2));
     }
+
+    @Test
+    public void treeObject_setLeft_setToTreeNode(){
+        TreeObject obj1 = new TreeObject(new DNASequence("AAAA"));
+        BTreeNode node = new BTreeNode();
+        obj1.setLeft(node);
+        assertEquals(obj1.left, node);
+    }
 }
