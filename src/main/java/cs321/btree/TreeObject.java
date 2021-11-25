@@ -1,37 +1,45 @@
 package cs321.btree;
+import cs321.create.DNASequence;
 
-import java.util.Objects;
+public class TreeObject{
+    public BTreeNode left;
+    public BTreeNode right;
+    int key;
 
-public class TreeObject<E> {
-    E key;
-    int pos;
-    public TreeObject<E> left;
-    public TreeObject<E> right;
-    public TreeObject<E> parent;
-
-    public TreeObject(E key1, int pos1) {
-        key = key1;
-        pos = pos1;
+    public TreeObject(DNASequence seq) {
+        key = seq.getInt();
         left = null;
         right = null;
-        parent = null;
     }
 
-    public E getKey(){
-        return this.key;
+    public int getKey(){
+        return key;
     }
 
-    public int equal(E o) {
-        if (this.key.hashCode() == o.hashCode()) return 0;
-        if (o.hashCode() > this.key.hashCode()) return -1;
-        if (o.hashCode() < this.key.hashCode()) return 1;
-        return 0;
+    public int equals(TreeObject obj) {
+        if (key == obj.getKey())
+            return 0;
+        else if (key < obj.getKey())
+            return -1;
+        else if (key > obj.getKey())
+            return 1;
+        else 
+            return 0;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(key);
+    public void setLeft(BTreeNode child){
+        left = child;
     }
 
+    public BTreeNode getLeft(){
+        return left;
+    }
 
+    public void setRight(BTreeNode child){
+        right = child;
+    }
+
+    public BTreeNode getRight(){
+        return right;
+    }
 }
