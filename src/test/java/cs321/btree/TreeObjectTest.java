@@ -38,4 +38,11 @@ public class TreeObjectTest {
         assertEquals(1, obj1.equals(obj2));
     }
 
+    @Test
+    public void lessThanTreeObjects_equals_returnNegative1(){
+        TreeObject obj1 = new TreeObject(new DNASequence("AAAA"));
+        TreeObject obj2 = new TreeObject(new DNASequence("TTTT"));
+
+        assertEquals(-1, obj1.equals(obj2));
+    }
 }
