@@ -30,4 +30,12 @@ public class TreeObjectTest {
         assertEquals(0, obj1.equals(obj2));
     }
 
+    @Test
+    public void greaterThanTreeObjects_equals_return1(){
+        TreeObject obj1 = new TreeObject(new DNASequence("TTTT"));
+        TreeObject obj2 = new TreeObject(new DNASequence("AAAA"));
+
+        assertEquals(1, obj1.equals(obj2));
+    }
+
 }
