@@ -69,4 +69,12 @@ public class TreeObjectTest {
         obj1.setLeft(node);
         assertEquals(obj1.getLeft(), node);
     }
+
+    @Test
+    public void treeObject_getRight_rightChild(){
+        TreeObject obj1 = new TreeObject(new DNASequence("AAAA"));
+        BTreeNode node = new BTreeNode();
+        obj1.setRight(node);
+        assertEquals(obj1.getRight(), node);
+    }
 }
