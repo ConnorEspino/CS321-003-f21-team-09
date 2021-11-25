@@ -22,6 +22,12 @@ public class TreeObjectTest {
         assertEquals((long) 00000000, obj.getKey());
     }
 
-    
+    @Test
+    public void equalTreeObjects_equals_return0(){
+        TreeObject obj1 = new TreeObject(new DNASequence("AAAA"));
+        TreeObject obj2 = new TreeObject(new DNASequence("AAAA"));
+
+        assertEquals(0, obj1.equals(obj2));
+    }
 
 }
