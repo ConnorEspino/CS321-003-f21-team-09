@@ -94,4 +94,16 @@ public class BTreeNodeTest {
             assert(false);
         }
     }
+
+    @Test
+    public void nodeObject_getInvalidIndex_IndexOutOfBoundsException(){
+        BTreeNode node = new BTreeNode(5);
+
+        try{
+            node.get(10);
+            assert(false);
+        }catch(Exception e){
+            assert(true);
+        }
+    }
 }
