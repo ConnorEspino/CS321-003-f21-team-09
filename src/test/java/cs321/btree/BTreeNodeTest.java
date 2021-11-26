@@ -55,4 +55,16 @@ public class BTreeNodeTest {
         node.insert(new TreeObject(new DNASequence("TTT")));
         assertEquals(true, node.isLeaf());
     }
+
+    @Test
+    public void notLeafNode_isLeaf_returnFalse(){
+        BTreeNode node = new BTreeNode(5);
+        BTreeNode childNode = new BTreeNode(5);
+
+        TreeObject obj = new TreeObject(new DNASequence("AAA"));
+
+        obj.setLeft(childNode);
+        node.insert(obj);
+        assertEquals(false, node.isLeaf());
+    }
 }
