@@ -75,4 +75,10 @@ public class BTreeNodeTest {
         node.insert(new TreeObject(new DNASequence("TTT")));
         assertEquals(2, node.getNumObjects());
     }
+
+    @Test
+    public void emptyNodeObject_getNumElements_return0(){
+        BTreeNode node = new BTreeNode(5);
+        assertEquals(0, node.getNumObjects());
+    }
 }
