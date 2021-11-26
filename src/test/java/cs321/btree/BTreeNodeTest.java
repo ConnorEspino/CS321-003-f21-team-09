@@ -67,4 +67,12 @@ public class BTreeNodeTest {
         node.insert(obj);
         assertEquals(false, node.isLeaf());
     }
+
+    @Test
+    public void multipleObjectsNode_getNumObjects_returnNumElements(){
+        BTreeNode node = new BTreeNode(5);
+        node.insert(new TreeObject(new DNASequence("AAA")));
+        node.insert(new TreeObject(new DNASequence("TTT")));
+        assertEquals(2, node.getNumObjects());
+    }
 }
