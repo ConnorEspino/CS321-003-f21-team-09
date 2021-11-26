@@ -1,4 +1,6 @@
 package cs321.btree;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 import cs321.create.DNASequence;
@@ -44,5 +46,13 @@ public class BTreeNodeTest {
         }catch(Exception e){
             assert(false);
         }
+    }
+
+    @Test
+    public void leafNode_isLeaf_returnTrue(){
+        BTreeNode node = new BTreeNode(5);
+        node.insert(new TreeObject(new DNASequence("AAA")));
+        node.insert(new TreeObject(new DNASequence("TTT")));
+        assertEquals(true, node.isLeaf());
     }
 }
