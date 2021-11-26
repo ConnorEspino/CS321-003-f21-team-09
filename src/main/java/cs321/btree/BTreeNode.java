@@ -70,7 +70,7 @@ public class BTreeNode {
 
     /**
      * Checks whether or not any element in the node has children
-     * @return True if the node has no Objects that have children, false otherwise
+     * @return boolean True if the node has no Objects that have children, false otherwise
      */
     public boolean isLeaf() {
         for (int i = 0; i < size; i++) {
@@ -85,10 +85,23 @@ public class BTreeNode {
     /**
      * Returns the number of objects stored in this node
      * 
-     * @return The number of TreeObjects stored in the node
+     * @return int The number of TreeObjects stored in the node
      */
     public int getNumObjects(){
         return size;
+    }
+
+    /**
+     * Returns the TreeObject at the given index
+     * @param index The index of the object to access
+     * @return TreeObject The object at the given index
+     * @throws IndexOutOfBoundsException
+     */
+    public TreeObject get(int index){
+        if(index < 0 || index >= size){
+            throw new IndexOutOfBoundsException("Invalid index");
+        }
+        return array[index];
     }
 
 }
