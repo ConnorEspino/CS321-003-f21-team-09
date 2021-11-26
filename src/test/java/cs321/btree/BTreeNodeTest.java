@@ -81,4 +81,17 @@ public class BTreeNodeTest {
         BTreeNode node = new BTreeNode(5);
         assertEquals(0, node.getNumObjects());
     }
+    
+    @Test
+    public void multipleObjectsNode_getValidIndex_ExpectNoExceptions(){
+        BTreeNode node = new BTreeNode(5);
+        node.insert(new TreeObject(new DNASequence("AAA")));
+        node.insert(new TreeObject(new DNASequence("TTT")));
+
+        try{
+            node.get(1);
+        }catch(Exception e){
+            assert(false);
+        }
+    }
 }
