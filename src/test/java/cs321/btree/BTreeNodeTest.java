@@ -23,4 +23,15 @@ public class BTreeNodeTest {
             assert(false);
         }
     }
+
+    @Test
+    public void notEmptyNodeObject_insert_ExpectNoException(){
+        try{
+            BTreeNode node = new BTreeNode(5);
+            node.insert(new TreeObject(new DNASequence("AAA")));
+            node.insert(new TreeObject(new DNASequence("AAA")));
+        }catch(Exception e){
+            assert(false);
+        }
+    }
 }
