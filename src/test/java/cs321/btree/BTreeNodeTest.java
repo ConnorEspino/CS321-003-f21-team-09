@@ -73,13 +73,13 @@ public class BTreeNodeTest {
         BTreeNode node = new BTreeNode(5);
         node.insert(new TreeObject(new DNASequence("AAA")));
         node.insert(new TreeObject(new DNASequence("TTT")));
-        assertEquals(2, node.getNumObjects());
+        assertEquals(2, node.getNumElements());
     }
 
     @Test
     public void emptyNodeObject_getNumElements_return0(){
         BTreeNode node = new BTreeNode(5);
-        assertEquals(0, node.getNumObjects());
+        assertEquals(0, node.getNumElements());
     }
     
     @Test
@@ -89,7 +89,7 @@ public class BTreeNodeTest {
         node.insert(new TreeObject(new DNASequence("TTT")));
 
         try{
-            node.get(1);
+            node.getElement(1);
         }catch(Exception e){
             assert(false);
         }
@@ -100,7 +100,7 @@ public class BTreeNodeTest {
         BTreeNode node = new BTreeNode(5);
 
         try{
-            node.get(10);
+            node.getElement(10);
             assert(false);
         }catch(Exception e){
             assert(true);

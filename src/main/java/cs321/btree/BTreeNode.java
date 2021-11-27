@@ -9,6 +9,8 @@ public class BTreeNode {
     private BTreeNode children[];
     // The number of elements currently in the node
     private int size;
+    //Degree of the BTree
+    private int degree;
 
     /**
      * Constructor for BTreeNode
@@ -17,46 +19,69 @@ public class BTreeNode {
     public BTreeNode(int degree) {
         size = 0;
         leaf = true;
+        this.degree = degree;
         // Initialize array with a size of 2t-1
         array = new TreeObject[(2 * degree) - 1];
         children = new BTreeNode[2*degree];
     }
 
     /**
-     * Insert a BTreeObject into the node
+     * Insert a BTreeObject into the node, CAUTION: This assumes the Node is not currently full, a check that should be done before inserting in the BTree class.
      * @param obj The object being inserted
+     * @throws BTreeException If the node is full
      */
-    public void insert(TreeOjbect obj) {
+    public void insert(TreeObject obj) {
         if (array[array.length - 1] != null) {
             throw new BTreeException("Node is full, split before adding more elements");
         }
 
-        if(leaf){
-            int i = size;
-            while(size >= 0 && obj.getKey() < array[i].getKey()){
-                array[i+1] = array[i];
-                i--;
-            }
-            //Disk-write(This node)
-        }else{
-            
+        // Empty list insertion
+        if (size == 0) {
+            array[0] = obj;
         }
+        // Non empty list insertion
+        else {
+            for (int i = size; i >= 0; i--) {
+                // If the object is a duplicate of one already in the list, increase the frequency of the one already in the list
+                if (obj.equals(array[i]) == 0) {
+                    array[i].increaseFrequency();
+                }
 
-        // Increase the size of the array after insertion
-        size++;
+                // If the object is greater than the object at index i, insert after that index.
+                if (obj.equals(array[i]) == 1) {
+
+                    // Shift elements over to make room for new insertion
+                    for (int j = size; j > i+1; j--) {
+                        array[j] = array[j - 1];
+                    }
+
+                    //Insert element
+                    array[i+1] = obj;
+                    // Increase the size of the array after insertion
+                    size++;
+                    break;
+                }
+
+                // If the whole array has been iterated through and no placement was found,
+                // insert at the beginning of the array
+                if (i == 0) {
+                    // Shift elements over to make room for new insertion
+                    for (int j = size; j > 0; j--) {
+                        array[j] = array[j - 1];
+                    }
+                    array[0] = obj;
+                    // Increase the size of the array after insertion
+                    size++;
+                }
+            }
+        }        
     }
 
     /**
      * Checks whether or not any element in the node has children
-     * @return boolean True if the node has no Objects that have children, false otherwise
+     * @return boolean True if the children array is empty, false otherwise
      */
     public boolean isLeaf() {
-        for (int i = 0; i < size; i++) {
-            // Update leaf boolean
-            if (array[i].getLeft() != null || array[i].getRight() != null) {
-                leaf = false;
-            }
-        }
         return leaf;
     }
 
@@ -65,7 +90,7 @@ public class BTreeNode {
      * 
      * @return int The number of TreeObjects stored in the node
      */
-    public int getNumObjects(){
+    public int getNumElements(){
         return size;
     }
 
@@ -75,11 +100,38 @@ public class BTreeNode {
      * @return TreeObject The object at the given index
      * @throws IndexOutOfBoundsException
      */
-    public TreeObject get(int index){
+    public TreeObject getElement(int index){
         if(index < 0 || index >= size){
             throw new IndexOutOfBoundsException("Invalid index");
         }
         return array[index];
+    }
+
+    /**
+     * Returns the child at the given index of the children array
+     * @param index The index of the child to access
+     * @return BTreeNode The child node stored at the index
+     * @throws IndexOutOfBoundsException
+     */
+    public BTreeNode getChild(int index){
+        if(index < 0 || index >= (2*degree)){
+            throw new IndexOutOfBoundsException("Invalid index");
+        }
+        return children[index];
+    }
+
+    /**
+     * Sets the child node at the index to be the given node
+     * @param index The index of the children array to store the child node
+     * @param node The child node to store at the given array
+     * @throws IndexOutOfBoundsException
+     */
+    public void setChild(int index, BTreeNode node){
+        if(index < 0 || index >= (2*degree)){
+            throw new IndexOutOfBoundsException("Invalid index");
+        }
+        children[index] = node;
+        leaf = false;
     }
 
 }
