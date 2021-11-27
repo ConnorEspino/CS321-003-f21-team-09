@@ -5,6 +5,8 @@ public class BTreeNode {
     private boolean leaf;
     // Array of treeObjects to store in node
     private TreeObject array[];
+    //Array of child nodes
+    private BTreeNode children[];
     // The number of elements currently in the node
     private int size;
 
@@ -17,6 +19,7 @@ public class BTreeNode {
         leaf = true;
         // Initialize array with a size of 2t-1
         array = new TreeObject[(2 * degree) - 1];
+        children = new BTreeNode[2*degree];
     }
 
     /**
@@ -28,40 +31,15 @@ public class BTreeNode {
             throw new BTreeException("Node is full, split before adding more elements");
         }
 
-        // Empty list insertion
-        if (size == 0) {
-            array[0] = obj;
-        }
-        // Non empty list insertion
-        else {
-            for (int i = 0; i < size; i++) {
-                // If the object is a duplicate of one already in the list, copy the
-                // children of the one in the list to the object
-                if (obj.equals(array[i]) == 0) {
-                    obj.setLeft(array[i].getLeft());
-                    obj.setRight(array[i].getRight());
-                }
-
-                // If the object is less than or equal to the object at index i, insert before
-                // that index
-                if (obj.equals(array[i]) == -1 || obj.equals(array[i]) == 0) {
-
-                    // Shift elements over to make room for new insertion
-                    for (int j = array.length - 1; j >= i; j--) {
-                        array[j] = array[j - 1];
-                    }
-
-                    //Insert element
-                    array[i] = obj;
-                    break;
-                }
-
-                // If the whole array has been iterated through and no placement was found,
-                // insert at the end of the array
-                if (i == size - 1) {
-                    array[size] = obj;
-                }
+        if(leaf){
+            int i = size;
+            while(size >= 0 && obj.getKey() < array[i].getKey()){
+                array[i+1] = array[i];
+                i--;
             }
+            //Disk-write(This node)
+        }else{
+            
         }
 
         // Increase the size of the array after insertion
