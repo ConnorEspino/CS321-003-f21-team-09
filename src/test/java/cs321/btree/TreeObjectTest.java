@@ -45,36 +45,4 @@ public class TreeObjectTest {
 
         assertEquals(-1, obj1.equals(obj2));
     }
-
-    @Test
-    public void treeObject_setLeft_setToTreeNode(){
-        TreeObject obj1 = new TreeObject(new DNASequence("AAAA"));
-        BTreeNode node = new BTreeNode();
-        obj1.setLeft(node);
-        assertEquals(obj1.left, node);
-    }
-
-    @Test
-    public void treeObject_setRight_setToTreeNode(){
-        TreeObject obj1 = new TreeObject(new DNASequence("AAAA"));
-        BTreeNode node = new BTreeNode();
-        obj1.setRight(node);
-        assertEquals(obj1.right, node);
-    }
-
-    @Test
-    public void treeObject_getLeft_leftChild(){
-        TreeObject obj1 = new TreeObject(new DNASequence("AAAA"));
-        BTreeNode node = new BTreeNode();
-        obj1.setLeft(node);
-        assertEquals(obj1.getLeft(), node);
-    }
-
-    @Test
-    public void treeObject_getRight_rightChild(){
-        TreeObject obj1 = new TreeObject(new DNASequence("AAAA"));
-        BTreeNode node = new BTreeNode();
-        obj1.setRight(node);
-        assertEquals(obj1.getRight(), node);
-    }
 }

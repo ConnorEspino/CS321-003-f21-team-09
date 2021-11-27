@@ -1,36 +1,39 @@
 package cs321.btree;
+
 import cs321.create.DNASequence;
 
-public class TreeObject{
-    public BTreeNode left;
-    public BTreeNode right;
-    long key;
+public class TreeObject {
+    private long key;
+    private int frequency;
 
     /**
      * Constructor for Tree object
+     * 
      * @param seq The DNASequence to store in the tree object
      */
     public TreeObject(DNASequence seq) {
-        //Store the DNASequence as a binary long
+        // Store the DNASequence as a binary long
         key = seq.getLong();
-        left = null;
-        right = null;
+        frequency = 0;
     }
 
     /**
-     * Allows us to access the key which lets us compare to other elements and sort correctly in the Btree
+     * Allows us to access the key which lets us compare to other elements and sort
+     * correctly in the Btree
      * 
      * @return long The binary representation of the DNASequence
      */
-    public long getKey(){
+    public long getKey() {
         return key;
     }
 
     /**
-     * Indicates whether another object is less than, equal to, or greater than this one
+     * Indicates whether another object is less than, equal to, or greater than this
+     * one
      * 
-     * @param obj The object to compare to this object 
-     * @return int 0 if equal, -1 if less than, 1 if greater than the compared to object
+     * @param obj The object to compare to this object
+     * @return int 0 if equal, -1 if less than, 1 if greater than the compared to
+     *         object
      */
     public int equals(TreeObject obj) {
         if (key == obj.getKey())
@@ -39,43 +42,24 @@ public class TreeObject{
             return -1;
         else if (key > obj.getKey())
             return 1;
-        else 
+        else
             return 0;
     }
 
     /**
-     * Allows us to set the left child pointer of this TreeObject
-     * 
-     * @param child The BTreeNode that is less than the current object
+     * Increases the frequency of the DNASequence in the BTree
      */
-    public void setLeft(BTreeNode child){
-        left = child;
+    public void increaseFrequency() {
+        frequency++;
     }
 
     /**
-     * Allows us to get the left child pointer of this TreeObject
+     * Allows us to get how many times the given DNASequence has been attempted to
+     * be inserted
      * 
-     * @return BTreeNode The BTreeNode that is less than the current object
+     * @return int The frequency of the DNA Sequence in the BTree
      */
-    public BTreeNode getLeft(){
-        return left;
-    }
-
-    /**
-     * Allows us to set the right child pointer of this TreeObject
-     * 
-     * @param child The BTreeNode that is greater than the current object
-     */
-    public void setRight(BTreeNode child){
-        right = child;
-    }
-
-    /**
-     * Allows us to get the right child pointer of this TreeObject
-     * 
-     * @param child The BTreeNode that is greater than the current object
-     */
-    public BTreeNode getRight(){
-        return right;
+    public int getFrequency() {
+        return frequency;
     }
 }
