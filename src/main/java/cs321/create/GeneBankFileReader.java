@@ -46,11 +46,14 @@ public class GeneBankFileReader {
      */
     public DNASequence getNextSequence(){
         StringBuilder build = new StringBuilder();
+        //SubScan is made so we don't lose our place in the file by calling next on our file scanner. 
+        Scanner subScan;
         String next;
 
         //Create a string of the DNA sequence of length seqLength
         for(int i = 0; i < seqLength; i++){
-            next = scan.next();
+            subScan = scan;
+            next = subScan.next();
 
             //Check if the scanner has reached the end of the readable DNA sequence
             if(next.equals("/")){
@@ -65,6 +68,7 @@ public class GeneBankFileReader {
 
             build.append(next);
         }
+        scan.next();
         return(new DNASequence(build.toString().toUpperCase()));
     }
 
