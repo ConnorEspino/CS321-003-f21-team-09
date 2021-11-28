@@ -55,6 +55,13 @@ public class BTreeNode {
                         array[j] = array[j - 1];
                     }
 
+                    //Shift over elements in the children array
+                    for(int j = (degree*2); j > i+1; j--){
+                        children[j] = children[j-1];
+                    }
+                    //Copy the last child node to the next spot over
+                    children[i+1] = children[i];
+
                     //Insert element
                     array[i+1] = obj;
                     // Increase the size of the array after insertion
