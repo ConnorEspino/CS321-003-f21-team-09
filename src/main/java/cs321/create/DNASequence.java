@@ -69,14 +69,14 @@ public class DNASequence {
      * Compares two DNASequence objects, to see if they are equal.
      * 
      * @param otherList - The list to compare to.
-     * @return int - Returns 0 if both lists are equal, 1 if the first list is greater, 
-     *      and -1 if the second list is greater.
+     * @return int - Returns 0 if both lists are equal, -1 if the first list is greater, 
+     *      and 1 if the second list is greater.
      */
     public int equals(DNASequence otherList) {
         if (this.getLong() < otherList.getLong()) {
-            return 1;
-        } else if (this.getLong() > otherList.getLong()) {
             return -1;
+        } else if (this.getLong() > otherList.getLong()) {
+            return 1;
         } else {
             return 0;
         }
