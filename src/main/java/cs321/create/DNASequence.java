@@ -64,20 +64,21 @@ public class DNASequence {
     public long getLong() {        
         return list;
     }
-
+    
     /**
      * Compares two DNASequence objects, to see if they are equal.
      * 
      * @param otherList - The list to compare to.
-     * @return boolean - True or false depending on the results of the given objects.
+     * @return int - Returns 0 if both lists are equal, 1 if the first list is greater, 
+     *      and -1 if the second list is greater.
      */
-    public boolean equals(DNASequence otherList) {
-
-        if (this.getSize() != otherList.getSize()) {
-            return false;
+    public int equals(DNASequence otherList) {
+        if (this.getLong() < otherList.getLong()) {
+            return 1;
+        } else if (this.getLong() > otherList.getLong()) {
+            return -1;
+        } else {
+            return 0;
         }
-
-        return this.equals(otherList);
     }
-    
 }
