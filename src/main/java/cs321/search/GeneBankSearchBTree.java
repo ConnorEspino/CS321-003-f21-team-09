@@ -17,6 +17,7 @@ public class GeneBankSearchBTree {
     private int useCache;
     private int cacheSize;
     private int debugLevel;
+    private int degree;
     private FileChannel file;
     private ByteBuffer buffer;
 
@@ -74,11 +75,12 @@ public class GeneBankSearchBTree {
      * @param x     The root node to start searching from
      * @return int How many occurances of subsequence query exist in BTree
      */
-    public int frequencyOf(BTreeNode x, int query) {
-
+    public int find(BTreeNode x, int query) {
+        
 
     }
 
+    //TODO Find out how to combine this into a tree. Specifically, how we read children in the file. 
     public BTreeNode diskRead(long diskAddress) throws IOException {
         file.position(diskAddress);
         buffer.clear();
@@ -90,23 +92,20 @@ public class GeneBankSearchBTree {
         BTreeNode x = new BTreeNode(false); //the false flag is so that it isn't added to the disk file
         
         int numElem = buffer.getInt();
+
+        byte isLeaf = buffer.get();
+        boolean leaf = false;
+        if (isLeaf == 1) leaf = true;
+
         for(int i = 0; i < numElem; i++){
             long bases = buffer.getLong();
             int frequency = buffer.getInt();
             x.insert(new TreeObject(new DNASequence(bases), frequency));
         }
-        long n = buffer.getLong();
-        byte value = buffer.get(); // read a byte
-        boolean leaf = false;
-        if (value == 1) leaf = true;
-        long left = buffer.getLong();
-        long right = buffer.getLong();
-    
-        
-        x.n = n;
-        x.leaf = leaf;
-        x.left = left;
-        x.right = right;
+        for(int i = 0; i < (2*degree) - 1; i++){
+            long address = buffer.getLong();
+            x.setChild(i, address);
+        }
         
         return x;
         }
