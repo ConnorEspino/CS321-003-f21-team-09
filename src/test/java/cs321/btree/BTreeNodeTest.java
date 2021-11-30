@@ -49,7 +49,7 @@ public class BTreeNodeTest {
     }
 
     @Test
-    public void leafNode_isLeaf_returnTrue(){
+    public void leafNode_isLeaf_returnTrue() throws BTreeException{
         BTreeNode node = new BTreeNode(5);
         node.insert(new TreeObject(new DNASequence("AAA")));
         node.insert(new TreeObject(new DNASequence("TTT")));
@@ -57,19 +57,19 @@ public class BTreeNodeTest {
     }
 
     @Test
-    public void notLeafNode_isLeaf_returnFalse(){
+    public void notLeafNode_isLeaf_returnFalse() throws BTreeException{
         BTreeNode node = new BTreeNode(5);
         BTreeNode childNode = new BTreeNode(5);
 
         TreeObject obj = new TreeObject(new DNASequence("AAA"));
 
-        obj.setLeft(childNode);
+        node.setChild(0, childNode);
         node.insert(obj);
         assertEquals(false, node.isLeaf());
     }
 
     @Test
-    public void multipleObjectsNode_getNumObjects_returnNumElements(){
+    public void multipleObjectsNode_getNumObjects_returnNumElements() throws BTreeException{
         BTreeNode node = new BTreeNode(5);
         node.insert(new TreeObject(new DNASequence("AAA")));
         node.insert(new TreeObject(new DNASequence("TTT")));
@@ -83,7 +83,7 @@ public class BTreeNodeTest {
     }
     
     @Test
-    public void multipleObjectsNode_getValidIndex_ExpectNoExceptions(){
+    public void multipleObjectsNode_getValidIndex_ExpectNoExceptions() throws BTreeException{
         BTreeNode node = new BTreeNode(5);
         node.insert(new TreeObject(new DNASequence("AAA")));
         node.insert(new TreeObject(new DNASequence("TTT")));

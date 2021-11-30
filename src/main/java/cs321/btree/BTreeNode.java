@@ -30,7 +30,7 @@ public class BTreeNode {
      * @param obj The object being inserted
      * @throws BTreeException If the node is full
      */
-    public void insert(TreeObject obj) {
+    public void insert(TreeObject obj) throws BTreeException {
         if (array[array.length - 1] != null) {
             throw new BTreeException("Node is full, split before adding more elements");
         }
@@ -38,10 +38,11 @@ public class BTreeNode {
         // Empty list insertion
         if (size == 0) {
             array[0] = obj;
+            size++;
         }
         // Non empty list insertion
         else {
-            for (int i = size; i >= 0; i--) {
+            for (int i = size-1; i >= 0; i--) {
                 // If the object is a duplicate of one already in the list, increase the frequency of the one already in the list
                 if (obj.equals(array[i]) == 0) {
                     array[i].increaseFrequency();
@@ -56,7 +57,7 @@ public class BTreeNode {
                     }
 
                     //Shift over elements in the children array
-                    for(int j = (degree*2); j > i+1; j--){
+                    for(int j = (degree*2) - 1; j > i+1; j--){
                         children[j] = children[j-1];
                     }
                     //Copy the last child node to the next spot over
