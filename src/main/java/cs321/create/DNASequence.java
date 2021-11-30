@@ -8,7 +8,7 @@ package cs321.create;
  */
 public class DNASequence {
     private long list;
-    private String sequenceString = null;
+    private String sequenceString = "";
 
     /** 
      * Constructor for the DNASequence class, using a string
@@ -53,7 +53,7 @@ public class DNASequence {
      * @return String - The current DNA sequence in String form.
      */
     public String toString() {
-        if(sequenceString == null) {
+        if(sequenceString == "") {
             String listString = String.valueOf(list);
             
             for (int i = 0; i < listString.length(); i++) {
@@ -87,18 +87,18 @@ public class DNASequence {
         return list;
     }
     
-    /**
+   /**
      * Compares two DNASequence objects, to see if they are equal.
      * 
      * @param otherList - The list to compare to.
-     * @return int - Returns 0 if both lists are equal, 1 if the first list is greater, 
-     *      and -1 if the second list is greater.
+     * @return int - Returns 0 if both lists are equal, -1 if the first list is greater, 
+     *      and 1 if the second list is greater.
      */
     public int equals(DNASequence otherList) {
         if (this.getLong() < otherList.getLong()) {
-            return 1;
-        } else if (this.getLong() > otherList.getLong()) {
             return -1;
+        } else if (this.getLong() > otherList.getLong()) {
+            return 1;
         } else {
             return 0;
         }
