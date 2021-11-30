@@ -18,6 +18,19 @@ public class TreeObject {
     }
 
     /**
+     * Overloaded constructor for Tree object
+     * 
+     * @param seq  The DNASequence to store in the tree object
+     * @param freq The frequency of how often this DNA Sequence was inserted into
+     *             the BTree
+     */
+    public TreeObject(DNASequence seq, int freq) {
+        // Store the DNASequence as a binary long
+        key = seq.getLong();
+        frequency = freq;
+    }
+
+    /**
      * Allows us to access the key which lets us compare to other elements and sort
      * correctly in the Btree
      * 
