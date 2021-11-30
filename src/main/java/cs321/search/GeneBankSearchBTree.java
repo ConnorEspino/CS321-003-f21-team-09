@@ -2,26 +2,35 @@ package cs321.search;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 import cs321.btree.BTree;
+import cs321.btree.BTreeNode;
 import cs321.common.ParseArgumentException;
 import cs321.common.ParseArgumentUtils;
 import cs321.create.DNASequence;
 
 public class GeneBankSearchBTree {
-    private static int useCache;
-    private static int cacheSize;
-    private static int debugLevel;
-    private static LinkedListCache cache;
+    private int useCache;
+    private int cacheSize;
+    private int debugLevel;
+    private FileChannel file;
+    private ByteBuffer buffer;
 
-    public static void main(String[] args) throws Exception {
+    //Change when you know metadata size
+    private static int METADATA_SIZE = 8;
+    private LinkedListCache cache;
+
+    public void main(String[] args) throws Exception {
         if(args.length < 3){
             //print usage message & exit
         }
         Scanner queryScan;
         
-        File treeFile = new File(args[1]);
+        RandomAccessFile treeFile = new RandomAccessFile(args[1], "r");
         File queryFile = new File(args[2]);
 
         try{
@@ -65,28 +74,41 @@ public class GeneBankSearchBTree {
      * @param x     The root node to start searching from
      * @return int How many occurances of subsequence query exist in BTree
      */
-    public int frequencyOf(BTreeObject x, int query) {
-        int count = 0;
-        
-        //TODO correct when BTreeObject class is implemented
+    public int frequencyOf(BTreeNode x, int query) {
 
-        // Iterate through each object stored in the current node
-        for (int i = 0; i < x.getNumElements(); i++) {
-
-            // If the value is less than the current element and the left child exists,
-            // count frequency starting from the left child
-            if (query < x.i && x.left != null) {
-                count += frequencyOf(x.left, query);
-            } else if (query == x.i) {
-                // If the value is equal to the current element increase count and search left
-                // and right children recursively
-                count++;
-                count += frequencyOf(x.left, query);
-                count += frequencyOf(x.right, query);
-            }
-        }
-        return count;
 
     }
+
+    public BTreeNode diskRead(long diskAddress) throws IOException {
+        file.position(diskAddress);
+        buffer.clear();
+    
+        file.read(buffer);
+        buffer.flip();
+
+        //TODO: ask about the false flag
+        BTreeNode x = new BTreeNode(false); //the false flag is so that it isn't added to the disk file
+        
+        int numElem = buffer.getInt();
+        for(int i = 0; i < numElem; i++){
+            long bases = buffer.getLong();
+            int frequency = buffer.getInt();
+            x.insert(new TreeObject(new DNASequence(bases), frequency));
+        }
+        long n = buffer.getLong();
+        byte value = buffer.get(); // read a byte
+        boolean leaf = false;
+        if (value == 1) leaf = true;
+        long left = buffer.getLong();
+        long right = buffer.getLong();
+    
+        
+        x.n = n;
+        x.leaf = leaf;
+        x.left = left;
+        x.right = right;
+        
+        return x;
+        }
 
 }
