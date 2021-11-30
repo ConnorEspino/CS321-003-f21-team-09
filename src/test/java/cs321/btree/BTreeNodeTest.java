@@ -59,11 +59,11 @@ public class BTreeNodeTest {
     @Test
     public void notLeafNode_isLeaf_returnFalse() throws BTreeException{
         BTreeNode node = new BTreeNode(5);
-        BTreeNode childNode = new BTreeNode(5);
+        long childNode = 5;
 
         TreeObject obj = new TreeObject(new DNASequence("AAA"));
 
-        node.setChild(0, childNode);
+        node.setChildAddress(0, childNode);
         node.insert(obj);
         assertEquals(false, node.isLeaf());
     }
