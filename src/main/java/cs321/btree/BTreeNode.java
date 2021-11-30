@@ -6,7 +6,7 @@ public class BTreeNode {
     // Array of treeObjects to store in node
     private TreeObject array[];
     //Array of child nodes
-    private BTreeNode children[];
+    private long children[];
     // The number of elements currently in the node
     private int size;
     //Degree of the BTree
@@ -22,7 +22,7 @@ public class BTreeNode {
         this.degree = degree;
         // Initialize array with a size of 2t-1
         array = new TreeObject[(2 * degree) - 1];
-        children = new BTreeNode[2*degree];
+        children = new long[2*degree];
     }
 
     /**
@@ -121,7 +121,7 @@ public class BTreeNode {
      * @return BTreeNode The child node stored at the index
      * @throws IndexOutOfBoundsException
      */
-    public BTreeNode getChild(int index){
+    public long getChildAddress(int index){
         if(index < 0 || index >= (2*degree)){
             throw new IndexOutOfBoundsException("Invalid index");
         }
@@ -134,11 +134,11 @@ public class BTreeNode {
      * @param node The child node to store at the given array
      * @throws IndexOutOfBoundsException
      */
-    public void setChild(int index, BTreeNode node){
+    public void setChildAddress(int index, long address){
         if(index < 0 || index >= (2*degree)){
             throw new IndexOutOfBoundsException("Invalid index");
         }
-        children[index] = node;
+        children[index] = address;
         leaf = false;
     }
 
