@@ -9,6 +9,7 @@ import java.nio.channels.FileChannel;
 
 import cs321.btree.BTree;
 import cs321.btree.BTreeNode;
+import cs321.btree.TreeObject;
 import cs321.common.ParseArgumentException;
 import cs321.common.ParseArgumentUtils;
 import cs321.create.DNASequence;
@@ -81,31 +82,32 @@ public class GeneBankSearchBTree {
     }
 
     //TODO Find out how to combine this into a tree. Specifically, how we read children in the file. 
-    public BTreeNode diskRead(long diskAddress) throws IOException {
+    public TreeObject diskRead(long diskAddress) throws IOException {
         file.position(diskAddress);
         buffer.clear();
     
         file.read(buffer);
         buffer.flip();
 
-        //TODO: ask about the false flag
-        BTreeNode x = new BTreeNode(false); //the false flag is so that it isn't added to the disk file
-        
+        TreeObject x;
+
         int numElem = buffer.getInt();
 
         byte isLeaf = buffer.get();
         boolean leaf = false;
         if (isLeaf == 1) leaf = true;
 
-        for(int i = 0; i < numElem; i++){
-            long bases = buffer.getLong();
-            int frequency = buffer.getInt();
-            x.insert(new TreeObject(new DNASequence(bases), frequency));
-        }
-        for(int i = 0; i < (2*degree) - 1; i++){
-            long address = buffer.getLong();
-            x.setChild(i, address);
-        }
+        long bases = buffer.getLong();
+        int frequency = buffer.getInt();
+        x = new TreeObject(new DNASequence(bases), frequency);
+
+
+        // for(int i = 0; i < (2*degree) - 1; i++){
+        //     long address = buffer.getLong();
+        //     //Do we have to store children arrays in binary file? 
+        //     //Do we just insert these objects into a BTree and the children are taken care of?
+        //     x.setChild(i, address);
+        // }
         
         return x;
         }
