@@ -174,4 +174,33 @@ public class BTreeNode {
         leaf = false;
     }
 
+    public BTreeNode BTreeSplitChild(BTreeNode TreeNode, int index) throws BTreeException, IOException {
+        BTreeNode z = new BTreeNode(degree, file, address);
+        BTreeNode y = new BTreeNode(degree, file, TreeNode.getChildAddress(index));
+        z.leaf = y.leaf;
+        z.size = degree - 1;
+        for (int j = 0; j < degree - 1; j++) {
+            z.array[j] = y.array[j + degree];
+        }
+        if (!y.isLeaf()) {
+            for (int j = 0; j < degree; j++) {
+                z.children[j] = y.children[j + degree];
+            }
+        }
+        y.size = degree - 1;
+        for (int j = TreeNode.getNumElements(); j > index + 1; j--) {
+            TreeNode.children[degree + j] = TreeNode.children[degree];
+        }
+        TreeNode.setChildAddress(index, z.address);
+        for (int j = TreeNode.getNumElements(); j > index; j--) {
+            TreeNode.array[degree + j] = TreeNode.array[degree];
+        }
+        TreeNode.array[index] = y.array[degree];
+        TreeNode.size++;
+        y.diskWrite();
+        z.diskWrite();
+        TreeNode.diskWrite();
+        return z;
+    }
+
 }
