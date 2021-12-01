@@ -1,5 +1,9 @@
 package cs321.btree;
 
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+
 public class BTreeNode {
     // A boolean which is true if this node is a leaf and otherwise false
     private boolean leaf;
@@ -11,26 +15,54 @@ public class BTreeNode {
     private int size;
     //Degree of the BTree
     private int degree;
+    private RandomAccessFile file;
+    private long address;
+    private ByteBuffer buffer;
 
     /**
      * Constructor for BTreeNode
      * @param degree The degree of the BTree that the node is in 
      */
-    public BTreeNode(int degree) {
+    public BTreeNode(int degree, RandomAccessFile file, long address) {
         size = 0;
         leaf = true;
         this.degree = degree;
+        this.file = file;
+        this.address = address;
         // Initialize array with a size of 2t-1
         array = new TreeObject[(2 * degree) - 1];
         children = new long[2*degree];
     }
 
+    public void diskWrite() throws IOException{
+        file.seek(address);
+        file.writeInt(size);
+        for(int i = 0; i < size; i++){
+            file.writeLong(array[i].getKey());
+        }
+        if(leaf){
+            file.writeInt(1);
+        }else{
+            file.writeInt(0);
+            for(int i = 0; i < (size*2) - 1; i++){
+                file.writeLong(children[i]);
+            }
+        }
+    }
+
+    // public BTreeNode diskRead() throws IOException{
+    //     file.seek(address);
+    //     buffer.clear();
+    
+    // }
+
     /**
-     * Insert a BTreeObject into the node, CAUTION: This assumes the Node is not currently full, a check that should be done before inserting in the BTree class.
+     * Insert a BTreeObject into the node
+     * CAUTION: This assumes the Node is not currently full, a check that should be done before inserting in the BTree class.
      * @param obj The object being inserted
      * @throws BTreeException If the node is full
      */
-    public void insert(TreeObject obj) throws BTreeException {
+    public void insertNonFull(TreeObject obj) throws BTreeException {
         if (array[array.length - 1] != null) {
             throw new BTreeException("Node is full, split before adding more elements");
         }
