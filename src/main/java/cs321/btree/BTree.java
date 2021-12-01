@@ -92,6 +92,7 @@ public class BTree{
             }
         }
         //y.getNumElements() = degree-1;
+
         for(int j = TreeNode.getNumElements(); j > degree+1; j--){
             TreeNode.getChild(degree+j) = TreeNode.getChild(j);
         }
