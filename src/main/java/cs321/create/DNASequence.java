@@ -7,72 +7,45 @@ package cs321.create;
  * 
  */
 public class DNASequence {
-    private int size;
-    private int list[];
+    private long list;
+    private String sequenceString = "";
 
     /** 
-     * Constructor for the DNASequence class.
+     * Constructor for the DNASequence class, using a string
+     *      as an input.
      * 
-     * @param sequence - DNA sequence (string) to input
+     * @param sequence - DNA sequence (string) to input.
      */
     public DNASequence(String sequence) {
-        list = new int[sequence.length()-1];
+        sequenceString = sequence;
+        size = 0;
         for (int i = 0; i < sequence.length(); i++) {
+            list = list << 2;
             switch (sequence.charAt(i)) {
                 case 'A':
-                    list[i] = (DNA.A);
+                    list |= (DNA.A);
                 break;
                 case 'T':
-                    list[i] = (DNA.T);
+                    list |= (DNA.T);
                 break;
                 case 'C':
-                    list[i] = (DNA.C);
+                    list |= (DNA.C);
                 break;
                 case 'G':
-                    list[i] = (DNA.G);
+                    list |= (DNA.G);
                 break;
             }
-            size++;
         }
     }
 
     /**
-     * Returns the first int in the sequence.
+     * Construct for the DNASequence class, using a long
+     *      as an input rather than a string.
      * 
-     * @return int - The first int in the list. 
+     * @param sequence - DNA sequence (long) to input.
      */
-    public int getFirst() {
-        return list[0];
-    }
-
-
-    /**
-     * Returns the last int in the sequence.
-     * 
-     * @return int - The last int in the list. 
-     */
-    public int getLast() {
-        return list[size-1];
-    }
-
-
-    /**
-     * Returns the int in the sequence at the specified index.
-     * 
-     * @param index - Index of the specified int.
-     * @return int - The int in the list at the given index.
-     */
-    public int get(int index) {
-        return list[index];
-    }
-
-    /**
-     * Returns the size of the sequence as an int value.
-     * 
-     * @return int - Size of the sequence.
-     */
-    public int getSize() {
-        return size;
+    public DNASequence(Long sequence) {
+        list = sequence;
     }
 
     /**
@@ -81,46 +54,54 @@ public class DNASequence {
      * @return String - The current DNA sequence in String form.
      */
     public String toString() {
-        String ret = "";
-        for (int i = 0; i < list.length; i++) {
-            switch (list[i]) {
-                case 0b00:
-                    ret = ret + 'A';
-                break;
-                case 0b11:
-                    ret = ret + 'T';
-                break;
-                case 0b01:
-                    ret = ret + 'C';
-                break;
-                case 0b10:
-                    ret = ret + 'G';
-                break;
+        if(sequenceString == "") {
+            String listString = String.valueOf(list);
+            
+            for (int i = 0; i < listString.length(); i++) {
+                switch (listString.substring(i, i+1)) {
+                    case "00":
+                        sequenceString = sequenceString + 'A';
+                    break;
+                    case "11":
+                        sequenceString = sequenceString + 'T';
+                    break;
+                    case "01":
+                        sequenceString = sequenceString + 'C';
+                    break;
+                    case "10":
+                        sequenceString = sequenceString + 'G';
+                    break;
+                }
+                i++;
             }
         }
 
-        return ret;
+        return sequenceString;
     }
 
     /**
+     * Returns the DNA sequence as a Long.
+     * 
+     * @return long - The listed DNA sequence.
+     */
+    public long getLong() {        
+        return list;
+    }
+    
+   /**
      * Compares two DNASequence objects, to see if they are equal.
      * 
      * @param otherList - The list to compare to.
-     * @return boolean - True or false depending on the results of the given objects.
+     * @return int - Returns 0 if both lists are equal, -1 if the first list is greater, 
+     *      and 1 if the second list is greater.
      */
-    public boolean equals(DNASequence otherList) {
-
-        if (this.getSize() != otherList.getSize()) {
-            return false;
+    public int equals(DNASequence otherList) {
+        if (this.getLong() < otherList.getLong()) {
+            return -1;
+        } else if (this.getLong() > otherList.getLong()) {
+            return 1;
+        } else {
+            return 0;
         }
-
-        for (int i = 0; i < this.getSize(); i++) {
-            if (this.get(i) != otherList.get(i)) {
-                return false;
-            }
-        }
-
-        return true;
     }
-    
 }
