@@ -1,162 +1,104 @@
 package cs321.btree;
+
 //Test
-public class BTree<E> extends TreeObject<E>{
-    private cs321.btree.TreeObject<E>[] BTree;
-    int cap = 100;
+public class BTree{
+    private BTreeNode[] BTree;
     int size;
+    private int degree;
 
-    public BTree(E key1, int pos1) {
-        super(key1, pos1);
-        BTree = new TreeObject[cap];
+    public BTree(int degree) {
+        BTree = new BTreeNode[4096];
         size = 0;
+        this.degree = degree;
+        BTreeNode x = new BTreeNode(degree);
+        //       DiskWrite(x);
+        setRoot(x);
     }
 
-    public cs321.btree.TreeObject<E>[] expandCap() {
-        size *= 2;
-        cs321.btree.TreeObject<E>[] BTreeCopy = new TreeObject[cap];;
-        for(int i = 0; i < size/2; i++){
-            BTreeCopy[i] = BTree[i];
-        }
-        return BTreeCopy;
-    }
-
-    public cs321.btree.TreeObject<E> root() {
-        TreeObject<E> root = BTree[0];
+    public BTreeNode root() {
+        BTreeNode root = BTree[0];
         return root;
     }
 
-    public boolean isLeaf(cs321.btree.TreeObject<E> TreeObject) {
-        boolean leaf = false;
-        if(TreeObject.left == null && TreeObject.right == null){
-            leaf = true;
-        }
-        return leaf;
+    public void setRoot(BTreeNode newRoot) {
+        BTree[0] = newRoot;
     }
 
-    public void inOrderTreeWalk(cs321.btree.TreeObject<E> TreeObject){
-        if (TreeObject != null) {
-            inOrderTreeWalk(TreeObject.left);
-            System.out.println(TreeObject.getKey());
-            inOrderTreeWalk(TreeObject.right);
-        }
-    }
 
-    public cs321.btree.TreeObject<E> treeSearch(cs321.btree.TreeObject<E> TreeObject,E newKey){
-        if(TreeObject == null | TreeObject.equal(newKey) == 0) {
-            return TreeObject;
+    //good?
+    public TreeObject BTreeSearch(BTreeNode TreeNode, TreeObject Key){
+        int i = 1;
+        while((i <= TreeNode.getNumElements()) && Key.getKey() > TreeNode.getElement(i).getKey()){
+            i++;
         }
-//        if (TreeObject.key < newKey) {
-        if (TreeObject.equal(newKey) > 0) {
-            return treeSearch(TreeObject.left, newKey);
+        if (i < TreeNode.getNumElements() && 0 == (Key.equals(TreeNode.getElement(i)))) {
+            return (TreeNode.getElement(i));
+        } else if(TreeNode.isLeaf()){
+            return null;
         } else {
-            return treeSearch(TreeObject.right, newKey);
+//            DiskRead(TreeNode.getChild(i));
+            return BTreeSearch(TreeNode.getChild(i), Key);
         }
-    }
-    public cs321.btree.TreeObject<E> IterativeTreeSearch(cs321.btree.TreeObject<E> TreeObject, E newKey){
-        while(TreeObject != null && TreeObject.key != newKey) {
-            if (TreeObject.equal(newKey) < 0) {
-                TreeObject = TreeObject.left;
-            } else {
-                TreeObject = TreeObject.right;
-            }
-        }
-        return TreeObject;
     }
 
-    public cs321.btree.TreeObject<E> treeMin(cs321.btree.TreeObject<E> TreeObject){
-        while(TreeObject.left != null) {
-            TreeObject = TreeObject.left;
-        }
-        return TreeObject;
-    }
+    //good?
+    public void BTreeInsert(TreeObject Key) throws BTreeException {
+        BTreeNode r = new BTreeNode(degree);
+        r = root();
+        if (r.getNumElements() == (2*degree)){
+            BTreeNode s = new BTreeNode(degree);
+            setRoot(s);
+            s.setChild(0,r);
+            BTreeSplitChild(s, 1);
 
-    public cs321.btree.TreeObject<E> treeMax(cs321.btree.TreeObject<E> TreeObject){
-        while(TreeObject.right != null) {
-            TreeObject = TreeObject.right;
-        }
-        return TreeObject;
-    }
-
-    public cs321.btree.TreeObject<E> treeSuccessor(cs321.btree.TreeObject<E> TreeObject){
-        if (TreeObject.right != null) {
-            return treeMin(TreeObject.right);
-        }
-        TreeObject<E> parent = TreeObject.parent;
-        while(parent != null && (TreeObject.getKey() == parent.right.getKey())) {
-            TreeObject = parent;
-            parent = parent.parent;
-        }
-        return parent;
-    }
-
-    public TreeObject<E> treePredecessor(cs321.btree.TreeObject<E> TreeObject){
-        if (TreeObject.left != null) {
-            return treeMax(TreeObject.left);
-        }
-        TreeObject<E> parent = TreeObject.parent;
-        while(parent != null && (TreeObject.getKey() == parent.left.getKey())) {
-            TreeObject = parent;
-            parent = parent.parent;
-        }
-        return parent;
-    }
-    public void treeInsert(cs321.btree.TreeObject<E> NewObject){
-        TreeObject<E> newParent = null;
-        TreeObject<E> root = root();
-        if(BTree.length >= size-1){
-            BTree = expandCap();
-        }
-        while(root != null) {
-            newParent = root;
-//          if (NewObject.key < root.key) {
-            if (NewObject.equal(root.key) < 0) {
-                    root = root.left;
-                } else {
-                    root = root.right;
-                }
-            size++;
-        }
-        NewObject.parent = newParent;
-        if(newParent == null) {
-            BTree[0] = NewObject;
-//      } else if(NewObject.key < newParent.key){
-        } else if(NewObject.equal(newParent.key) < 0){
-            newParent.left = NewObject;
+            BTreeInsertNonFull(s, Key);
+            s.insert(Key);
         } else {
-            newParent.right = NewObject;
+            //BTreeInsertNonFull(r, Key);
+            r.insert(Key);
         }
     }
 
-    public void transplant(cs321.btree.TreeObject<E> u, cs321.btree.TreeObject<E> v){
-        if(u.parent == null) {
-            BTree[0] = v;
-        } else if(u == u.parent.left) {
-            u.parent.left = v;
-        } else {
-            u.parent.right = v;
-        }
-        if(v != null) {
-            v.parent = u.parent;
-        }
+    //good?
+//    private void BTreeInsertNonFull(BTreeNode TreeNode, TreeObject key) throws BTreeException {
+//        int i = TreeNode.getNumElements();
+//        if(TreeNode.isLeaf() && i != degree){
+//                TreeNode.insert(key);
+//
+////                DiskWrite(key);
+//        } else if(TreeNode.isLeaf() && i == degree){
+//            while(i > 1 && TreeNode.getElement(i).getKey() > key.getKey()){
+//                i--;
+//            }
+//            i++;
+////            DiskRead(TreeNode.getElement(i))
+//            if(i == (2*degree-1)){
+//                BTreeNode child = BTreeSplitChild(TreeNode, i);
+//                if(key.getKey() > TreeNode.getElement(i).getKey()){
+//                    i++;
+//                }
+//                BTreeInsertNonFull(child, key);
+//            }
+//        }
+//    }
+
+    //TODO
+    public TreeObject[] getArrayOfNodeContentsForNodeIndex(int indexNode) {
+        return null;
     }
 
-    public void treeDelete(cs321.btree.TreeObject<E> newObject){
-        if(newObject.left == null) {
-            transplant(newObject, newObject.right);
-        } else if (newObject.right == null) {
-            transplant(newObject, newObject.left);
-        } else {
-            newObject.parent = treeMin(newObject.right);
-        }
-        if(newObject.parent.parent != newObject) {
-            transplant(newObject.parent, newObject.parent.right);
-        }
-        newObject.parent.right = newObject.right;
-        newObject.parent.right.parent = newObject.parent;
-        transplant(newObject, newObject.parent);
-        newObject.parent.left = newObject.left;
-        newObject.parent.left.parent = newObject.parent;
-        size--;
+    public int getNumberOfNodes() {
+        return size;
     }
 
+//    //TODO?
+//    public int returnIndex(BTreeNode Object){
+//        int index = -1;
+//        for(int i = 0; i < size; i++){
+//            if(BTree[i].equals(Object)){
+//                index = i;
+//            }
+//        }
+//        return index;
+//    }
 }
