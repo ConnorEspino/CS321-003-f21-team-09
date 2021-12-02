@@ -44,23 +44,23 @@ public class BTree{
             return null;
         } else {
 //            DiskRead(TreeNode.getChild(i));
-            return BTreeSearch(TreeNode.getChild(i), Key);
+            return BTreeSearch(TreeNode.getChildAddress(i), Key);
         }
     }
 
     //good?
-    public void BTreeInsert(TreeObject Key) throws BTreeException, IOException {
-        BTreeNode r = root();
-        if (r.getNumElements() == (2*degree)){
-            BTreeNode s = new BTreeNode(degree, file, address);
-            setRoot(s);
-//            .BTreeSplitChild(s, 1);
-//            BTreeInsertNonFull(s, Key);
-//            s.insert(Key);
-        } else {
-            r.insertNonFull(Key);
-        }
-    }
+//    public void BTreeInsert(TreeObject Key) throws BTreeException, IOException {
+//        BTreeNode r = root();
+//        if (r.getNumElements() == (2*degree)){
+//            BTreeNode s = new BTreeNode(degree, file, address);
+//            setRoot(s);
+////            .BTreeSplitChild(s, 1);
+////            BTreeInsertNonFull(s, Key);
+////            s.insert(Key);
+//        } else {
+//            r.insertNonFull(Key);
+//        }
+//    }
 
     //good?
 //    private void BTreeInsertNonFull(BTreeNode TreeNode, TreeObject key) throws BTreeException {
