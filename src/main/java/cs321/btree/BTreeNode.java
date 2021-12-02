@@ -190,7 +190,7 @@ public class BTreeNode {
     /**
      * Sets the child node at the index to be the given node
      * @param index The index of the children array to store the child node
-     * @param node The child node to store at the given array
+     * @param address The child node to store at the given array//change this
      * @throws IndexOutOfBoundsException
      */
     public void setChildAddress(int index, long address){
@@ -233,6 +233,21 @@ public class BTreeNode {
         z.diskWrite();
         TreeNode.diskWrite();
         return z;
+    }
+
+    public void BTreeInsert(BTree bTree, TreeObject Key) throws BTreeException, IOException {
+        BTreeNode r = bTree.root();
+        if (r.getNumElements() == (2*degree)){
+            BTreeNode s = new BTreeNode(degree, file, address);
+            bTree.setRoot(s);
+            s.leaf = false;
+            s.size = 0;
+            s.setChildAddress(1, r.address);
+            BTreeSplitChild(s,1);
+            s.insertNonFull(Key);
+        } else {
+            r.insertNonFull(Key);
+        }
     }
 
 }
