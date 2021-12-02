@@ -1,16 +1,23 @@
 package cs321.btree;
 
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
 //Test
 public class BTree{
     private BTreeNode[] BTree;
     int size;
     private int degree;
+    private RandomAccessFile file;
+    private long address;
 
-    public BTree(int degree) {
+    public BTree(int degree, RandomAccessFile file, long address) {
         BTree = new BTreeNode[4096];
         size = 0;
         this.degree = degree;
-        BTreeNode x = new BTreeNode(degree);
+        this.file = file;
+        this.address = address;
+        BTreeNode x = new BTreeNode(degree, file, address);
         //       DiskWrite(x);
         setRoot(x);
     }
@@ -42,20 +49,16 @@ public class BTree{
     }
 
     //good?
-    public void BTreeInsert(TreeObject Key) throws BTreeException {
-        BTreeNode r = new BTreeNode(degree);
-        r = root();
+    public void BTreeInsert(TreeObject Key) throws BTreeException, IOException {
+        BTreeNode r = root();
         if (r.getNumElements() == (2*degree)){
-            BTreeNode s = new BTreeNode(degree);
+            BTreeNode s = new BTreeNode(degree, file, address);
             setRoot(s);
-            s.setChild(0,r);
-            BTreeSplitChild(s, 1);
-
-            BTreeInsertNonFull(s, Key);
-            s.insert(Key);
+//            .BTreeSplitChild(s, 1);
+//            BTreeInsertNonFull(s, Key);
+//            s.insert(Key);
         } else {
-            //BTreeInsertNonFull(r, Key);
-            r.insert(Key);
+            r.insertNonFull(Key);
         }
     }
 
