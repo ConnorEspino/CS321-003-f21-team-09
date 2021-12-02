@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
+import cs321.create.DNASequence;
+
 public class BTreeNode {
     // A boolean which is true if this node is a leaf and otherwise false
     private boolean leaf;
@@ -13,6 +15,7 @@ public class BTreeNode {
     private long children[];
     // The number of elements currently in the node
     private int size;
+    private int numChildren;
     //Degree of the BTree
     private int degree;
     private RandomAccessFile file;
@@ -29,6 +32,7 @@ public class BTreeNode {
         this.degree = degree;
         this.file = file;
         this.address = address;
+        numChildren = 0;
         // Initialize array with a size of 2t-1
         array = new TreeObject[(2 * degree) - 1];
         children = new long[2*degree];
@@ -39,22 +43,45 @@ public class BTreeNode {
         file.writeInt(size);
         for(int i = 0; i < size; i++){
             file.writeLong(array[i].getKey());
+            file.writeInt(array[i].getFrequency());
         }
         if(leaf){
             file.writeInt(1);
         }else{
             file.writeInt(0);
-            for(int i = 0; i < (size*2) - 1; i++){
+            for(int i = 0; i < numChildren; i++){
                 file.writeLong(children[i]);
             }
         }
     }
 
-    // public BTreeNode diskRead() throws IOException{
-    //     file.seek(address);
-    //     buffer.clear();
-    
-    // }
+    public BTreeNode diskRead() throws IOException, BTreeException {
+        if (address == 0) return null;
+        BTreeNode x = new BTreeNode(degree, file, address);
+        
+        file.seek(address);
+
+        int n = file.readInt();
+
+        x.size = n;
+
+        for(int i = 0; i < n; i++){
+            long value = file.readLong();
+            int freq = file.readInt();
+            TreeObject obj = new TreeObject(new DNASequence(value), freq);
+            x.array[i] = obj;
+        }
+
+        //If there are children, read the children and store them in the file. 
+        //TODO: make sure it reads all children if theres a gap in the children array.
+        if(file.readByte() == 0){
+            for(int i = 0; i < numChildren; i++){
+                x.children[i] = file.readLong();
+            }
+        }
+
+        return x;
+    }
 
     /**
      * Insert a BTreeObject into the node
@@ -172,6 +199,11 @@ public class BTreeNode {
         }
         children[index] = address;
         leaf = false;
+        numChildren++;
+    }
+
+    public int getNumChildren(){
+        return numChildren;
     }
 
     public BTreeNode BTreeSplitChild(BTreeNode TreeNode, int index) throws BTreeException, IOException {
