@@ -18,7 +18,7 @@ public class BTree{
         this.file = file;
         this.address = address;
         BTreeNode x = new BTreeNode(degree, file, address);
-        x.diskWrite();
+        x.diskWrite(null);
         setRoot(x);
     }
 
@@ -38,12 +38,12 @@ public class BTree{
         while((i <= TreeNode.getNumElements()) && Key.getKey() > TreeNode.getElement(i).getKey()){
             i++;
         }
-        if (i < TreeNode.getNumElements() && 0 == (Key.equals(TreeNode.getElement(i)))) {
+        if (i < TreeNode.getNumElements() && 0 == (Key.compareTo(TreeNode.getElement(i)))) {
             return (TreeNode.getElement(i));
         } else if(TreeNode.isLeaf()){
             return null;
         } else {
-            BTreeNode nodeReturn = TreeNode.getChildAddress(i).diskRead(null);
+            BTreeNode nodeReturn = TreeNode.diskRead(TreeNode.getChildAddress(i), null);
             return BTreeSearch(nodeReturn, Key);
         }
     }
