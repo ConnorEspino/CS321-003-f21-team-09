@@ -60,5 +60,51 @@ public class GeneBankSearchBTreeArguments
         }
     }
 
-    
+    /**
+     * Returns the debug level set by users arguments
+     * @return int Debug level of the program
+     */
+    public int getDebug(){
+        return debugLevel;
+    }
+
+    /**
+     * Returns the size of the cache if the user specified to use a cache
+     * @return int The size of the cache, 0 if not using a cache
+     */
+    public int getCacheSize(){
+        return cacheSize;
+    }
+
+    /**
+     * Returns whether or not the user wants to use a cache to store the BTree Nodes
+     * @return boolean True if you're using a cache, false otherwise
+     */
+    public boolean useCache(){
+        return useCache == 1;
+    }   
+
+    /**
+     * Returns the RandomAccess Tree file
+     * @return RandomAccessFile The binary file that the BTree is stored in
+     */
+    public RandomAccessFile getTreeFile(){
+        return treeFile;
+    }
+
+    /**
+     * Returns the Query file
+     * @return File The file that contains the search queries
+     */
+    public File getQueryFile(){
+        return queryFile;
+    }
+
+    /**
+     * Gets the degree of the BTree
+     * @return int Degree of the BTree
+     */
+    public int getDegree(){
+        return degree;
+    }
 }
