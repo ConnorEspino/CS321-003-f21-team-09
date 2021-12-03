@@ -49,21 +49,21 @@ public class BTree{
     }
 
     public void BTreeInsert(TreeObject Key) throws BTreeException, IOException {
-            BTreeNode r = root();
-            if (r.getNumElements() == (2*degree)){
-                BTreeNode s = new BTreeNode(degree, file, address);
-                setRoot(s);
-                s.setChildAddress(1, r.getAddress());
-                s.BTreeSplitChild(s,1);
+        BTreeNode r = root();
+        if (r.getNumElements() == (2*degree)){
+            BTreeNode s = new BTreeNode(degree, file, address);
+            setRoot(s);
+            s.setChildAddress(1, r.getAddress());
+            s.BTreeSplitChild(s,1);
+            size++;
+            s.insertNonFull(Key);
+        } else {
+            if(size == 0){
                 size++;
-                s.insertNonFull(Key);
-            } else {
-                if(size == 0){
-                    size++;
-                }//
-                r.insertNonFull(Key);
             }
+            r.insertNonFull(Key);
         }
+    }
 
     //good?
 //    private void BTreeInsertNonFull(BTreeNode TreeNode, TreeObject key) throws BTreeException {
@@ -88,12 +88,20 @@ public class BTree{
 //        }
 //    }
 
-    public TreeObject[] getArrayOfNodeContentsForNodeIndex(int indexNode) {
+//    public TreeObject[] getArrayOfNodeContentsForNodeIndex(int indexNode) {
+//        TreeObject[] retVal = new TreeObject[BTree[indexNode].getNumElements()-1];
+//        for(int i = 0; i < BTree[indexNode].getNumElements()-1; i++){
+//            retVal[i] = BTree[indexNode].getElement(i);
+//        }
+//        return retVal;
+//    }
+
+    public void printNodeContentsForNodeIndex(int indexNode) {
         TreeObject[] retVal = new TreeObject[BTree[indexNode].getNumElements()-1];
         for(int i = 0; i < BTree[indexNode].getNumElements()-1; i++){
             retVal[i] = BTree[indexNode].getElement(i);
+            System.out.print(retVal[i].toString() + ", ");
         }
-        return retVal;
     }
 
     public int getNumberOfNodes() {
