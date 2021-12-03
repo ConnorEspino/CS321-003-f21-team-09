@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Scanner;
 
 import cs321.btree.BTree;
 import cs321.btree.BTreeNode;
@@ -25,6 +26,33 @@ public class GeneBankSearchBTree {
     //Change when you know metadata size
     private static int METADATA_SIZE = 8;
     private LinkedListCache cache;
+
+
+    /**
+     * Returns the frequency of subsequence query that occur in Btree
+     * 
+     * @param query The DNA Sequence we are searching for, represented in binary
+     * @param x     The root node to start searching from
+     * @return int How many occurances of subsequence query exist in BTree
+     */
+    public int find(BTreeNode x, long query) {
+        if(useCache == 1){
+
+        }else{
+            //Search starting at the end of the node.
+            for(int i = (2*degree) -1; i > 0; i--){
+                //If we find a match, return the frequency of that sequence
+                if(query == x.getElement(i).getKey()){
+                    return x.getElement(i).getFrequency();
+                }
+                //If the thing we're searching for is greater than the current element, check right child.
+                if(query > x.getElement(i).getKey()){
+                    find(x.diskRead(x.getChildAddress(i)), query);
+                }
+            }
+        }
+
+    }
 
     public void main(String[] args) throws Exception {
         if(args.length < 3){
@@ -57,59 +85,16 @@ public class GeneBankSearchBTree {
         }
         
         //Open Btree file
-        //TODO: Implement correctly when BTree class is complete
-        BTree tree; //Equals the bTree file
+        //TODO Do I create an entire Btree and then search through, or do I search through as Im building the btree?
+        BTree tree;
 
 
         //Search file for frequency of each query in the query file
         while(queryScan.hasNextLine()){
             String line = queryScan.nextLine();
-            System.out.println(line + ": " + frequencyOf(tree, new DNASequence(line).getInt()));
+            System.out.println(line + ": " + find(tree.root(), new DNASequence(line).getLong()));
         }
 
     }
-
-    /**
-     * Returns the frequency of subsequence query that occur in Btree
-     * 
-     * @param query The DNA Sequence we are searching for, represented in binary
-     * @param x     The root node to start searching from
-     * @return int How many occurances of subsequence query exist in BTree
-     */
-    public int find(BTreeNode x, int query) {
-        
-
-    }
-
-    //TODO Find out how to combine this into a tree. Specifically, how we read children in the file. 
-    public TreeObject diskRead(long diskAddress) throws IOException {
-        file.position(diskAddress);
-        buffer.clear();
-    
-        file.read(buffer);
-        buffer.flip();
-
-        TreeObject x;
-
-        int numElem = buffer.getInt();
-
-        byte isLeaf = buffer.get();
-        boolean leaf = false;
-        if (isLeaf == 1) leaf = true;
-
-        long bases = buffer.getLong();
-        int frequency = buffer.getInt();
-        x = new TreeObject(new DNASequence(bases), frequency);
-
-
-        // for(int i = 0; i < (2*degree) - 1; i++){
-        //     long address = buffer.getLong();
-        //     //Do we have to store children arrays in binary file? 
-        //     //Do we just insert these objects into a BTree and the children are taken care of?
-        //     x.setChild(i, address);
-        // }
-        
-        return x;
-        }
 
 }
