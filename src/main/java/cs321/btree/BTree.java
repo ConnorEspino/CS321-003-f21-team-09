@@ -11,14 +11,14 @@ public class BTree{
     private RandomAccessFile file;
     private long address;
 
-    public BTree(int degree, RandomAccessFile file, long address) {
+    public BTree(int degree, RandomAccessFile file, long address) throws IOException {
         BTree = new BTreeNode[4096];
         size = 0;
         this.degree = degree;
         this.file = file;
         this.address = address;
         BTreeNode x = new BTreeNode(degree, file, address);
-        //       DiskWrite(x);
+        x.diskWrite();
         setRoot(x);
     }
 
@@ -43,24 +43,23 @@ public class BTree{
         } else if(TreeNode.isLeaf()){
             return null;
         } else {
-//            DiskRead(TreeNode.getChild(i));
-            return BTreeSearch(TreeNode.getChildAddress(i), Key);
+            BTreeNode nodeReturn = TreeNode.diskRead(TreeNode.getChildAddress(i));
+            return BTreeSearch(nodeReturn, Key);
         }
     }
 
-    //good?
-//    public void BTreeInsert(TreeObject Key) throws BTreeException, IOException {
-//        BTreeNode r = root();
-//        if (r.getNumElements() == (2*degree)){
-//            BTreeNode s = new BTreeNode(degree, file, address);
-//            setRoot(s);
-////            .BTreeSplitChild(s, 1);
-////            BTreeInsertNonFull(s, Key);
-////            s.insert(Key);
-//        } else {
-//            r.insertNonFull(Key);
-//        }
-//    }
+    public void BTreeInsert(TreeObject Key) throws BTreeException, IOException {
+            BTreeNode r = BTree.root();
+            if (r.getNumElements() == (2*degree)){
+                BTreeNode s = new BTreeNode(degree, file, address);
+                setRoot(s);
+                s.setChildAddress(1, r.getAddress());
+                s.BTreeSplitChild(s,1);
+                s.insertNonFull(Key);
+            } else {
+                r.insertNonFull(Key);
+            }
+        }
 
     //good?
 //    private void BTreeInsertNonFull(BTreeNode TreeNode, TreeObject key) throws BTreeException {
