@@ -1,17 +1,24 @@
 package cs321.btree;
 
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
 //Test
 public class BTree{
     private BTreeNode[] BTree;
     int size;
     private int degree;
+    private RandomAccessFile file;
+    private long address;
 
-    public BTree(int degree) {
+    public BTree(int degree, RandomAccessFile file, long address) throws IOException {
         BTree = new BTreeNode[4096];
         size = 0;
         this.degree = degree;
-        BTreeNode x = new BTreeNode(degree);
- //       DiskWrite(x);
+        this.file = file;
+        this.address = address;
+        BTreeNode x = new BTreeNode(degree, file, address);
+        x.diskWrite(null);
         setRoot(x);
     }
 
@@ -25,85 +32,68 @@ public class BTree{
     }
 
 
-//good?
-    public TreeObject BTreeSearch(BTreeNode TreeNode, TreeObject Key){
+    //good?
+    public TreeObject BTreeSearch(BTreeNode TreeNode, TreeObject Key) throws BTreeException, IOException {
         int i = 1;
         while((i <= TreeNode.getNumElements()) && Key.getKey() > TreeNode.getElement(i).getKey()){
             i++;
         }
-        if (i < TreeNode.getNumElements() && 0 == (Key.equals(TreeNode.getElement(i)))) {
+        if (i < TreeNode.getNumElements() && 0 == (Key.compareTo(TreeNode.getElement(i)))) {
             return (TreeNode.getElement(i));
         } else if(TreeNode.isLeaf()){
             return null;
         } else {
-//            DiskRead(TreeNode.getChild(i));
-            return BTreeSearch(TreeNode.getChild(i), Key);
+            BTreeNode nodeReturn = TreeNode.diskRead(TreeNode.getChildAddress(i), null);
+            return BTreeSearch(nodeReturn, Key);
         }
     }
 
-//good?
-    public void BTreeInsert(TreeObject Key) throws BTreeException {
-        BTreeNode r = new BTreeNode(degree);
-        r = root();
-        if (r.getNumElements() == (2*degree)){
-            BTreeNode s = new BTreeNode(degree);
-            setRoot(s);
-            s.setChild(0,r);
-            BTreeSplitChild(s, 1);
-            BTreeInsertNonFull(s, Key);
-        } else {
-            BTreeInsertNonFull(r, Key);
+    public void BTreeInsert(TreeObject Key) throws BTreeException, IOException {
+            BTreeNode r = root();
+            if (r.getNumElements() == (2*degree)){
+                BTreeNode s = new BTreeNode(degree, file, address);
+                setRoot(s);
+                s.setChildAddress(1, r.getAddress());
+                s.BTreeSplitChild(s,1);
+                if(size == 1){
+                    size++;
+                }
+                size++;
+                s.insertNonFull(Key);
+            } else {
+                r.insertNonFull(Key);
+            }
         }
-    }
 
     //good?
-    private void BTreeInsertNonFull(BTreeNode TreeNode, TreeObject key) throws BTreeException {
-        int i = TreeNode.getNumElements();
-        if(TreeNode.isLeaf() && i != degree){
-                TreeNode.insert(key);
+//    private void BTreeInsertNonFull(BTreeNode TreeNode, TreeObject key) throws BTreeException {
+//        int i = TreeNode.getNumElements();
+//        if(TreeNode.isLeaf() && i != degree){
+//                TreeNode.insert(key);
+//
+////                DiskWrite(key);
+//        } else if(TreeNode.isLeaf() && i == degree){
+//            while(i > 1 && TreeNode.getElement(i).getKey() > key.getKey()){
+//                i--;
+//            }
+//            i++;
+////            DiskRead(TreeNode.getElement(i))
+//            if(i == (2*degree-1)){
+//                BTreeNode child = BTreeSplitChild(TreeNode, i);
+//                if(key.getKey() > TreeNode.getElement(i).getKey()){
+//                    i++;
+//                }
+//                BTreeInsertNonFull(child, key);
+//            }
+//        }
+//    }
 
-//                DiskWrite(key);
-        } else if(TreeNode.isLeaf() && i == degree){
-            while(i > 1 && TreeNode.getElement(i).getKey() > key.getKey()){
-                i--;
-            }
-            i++;
-//            DiskRead(TreeNode.getElement(i))
-            if(i == (2*degree-1)){
-                BTreeNode child = BTreeSplitChild(TreeNode, i);
-                if(key.getKey() > TreeNode.getElement(i).getKey()){
-                    i++;
-                }
-                BTreeInsertNonFull(child, key);
-            }
-        }
-    }
-
-    public BTreeNode BTreeSplitChild(BTreeNode TreeNode, int index){
-        BTreeNode z = new BTreeNode(degree);
-        BTreeNode y = new BTreeNode(degree);
-        y = TreeNode.getChild(index);
-        for(int j = 1; j< degree-1; j++){
-            //z.key(j) = y.key(j+degree)
-        }
-        if(!y.isLeaf()){
-            for(int j = 1; j < degree;j++){
-                //z.child.key(j) = y.child.key(j+degree)
-            }
-        }
-        //y.getNumElements() = degree-1;
-        for(int j = TreeNode.getNumElements(); j > degree+1; j--){
-            TreeNode.getChild(degree+j) = TreeNode.getChild(j);
-        }
-        TreeNode.getElement(index).getKey() = y.getElement(index).getKey();
-        TreeNode.getNumElements()++;
-        size++;
-        return z;
-    }
-
-    //TODO
     public TreeObject[] getArrayOfNodeContentsForNodeIndex(int indexNode) {
-        return null;
+        TreeObject[] retVal = new TreeObject[BTree[indexNode].getNumElements()-1];
+        for(int i = 0; i < BTree[indexNode].getNumElements()-1; i++){
+            retVal[i] = BTree[indexNode].getElement(i);
+        }
+        return retVal;
     }
 
     public int getNumberOfNodes() {
