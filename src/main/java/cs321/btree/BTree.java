@@ -46,7 +46,7 @@ public class BTree{
             BTreeNode nodeReturn = TreeNode.diskRead(TreeNode.getChildAddress(i));
             return BTreeSearch(nodeReturn, Key);
         }
-    }//change
+    }
 
     public void BTreeInsert(TreeObject Key) throws BTreeException, IOException {
             BTreeNode r = root();
@@ -84,9 +84,12 @@ public class BTree{
 //        }
 //    }
 
-    //TODO
     public TreeObject[] getArrayOfNodeContentsForNodeIndex(int indexNode) {
-        return null;
+        TreeObject[] retVal = new TreeObject[BTree[indexNode].getNumElements()-1];
+        for(int i = 0; i < BTree[indexNode].getNumElements()-1; i++){
+            retVal[i] = BTree[indexNode].getElement(i);
+        }
+        return retVal;
     }
 
     public int getNumberOfNodes() {
