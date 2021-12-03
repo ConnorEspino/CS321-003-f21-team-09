@@ -88,21 +88,23 @@ public class BTree{
 //        }
 //    }
 
-//    public TreeObject[] getArrayOfNodeContentsForNodeIndex(int indexNode) {
+    public TreeObject[] getArrayOfNodeContentsForNodeIndex(int indexNode) {
 //        TreeObject[] retVal = new TreeObject[BTree[indexNode].getNumElements()-1];
+        TreeObject[] retVal = BTree[indexNode].getArray();
 //        for(int i = 0; i < BTree[indexNode].getNumElements()-1; i++){
 //            retVal[i] = BTree[indexNode].getElement(i);
 //        }
-//        return retVal;
-//    }
-
-    public void printNodeContentsForNodeIndex(int indexNode) {
-        TreeObject[] retVal = new TreeObject[BTree[indexNode].getNumElements()-1];
-        for(int i = 0; i < BTree[indexNode].getNumElements()-1; i++){
-            retVal[i] = BTree[indexNode].getElement(i);
-            System.out.print(retVal[i].toString() + ", ");
-        }
+        return retVal;
     }
+
+//    public void printNodeContentsForNodeIndex(int indexNode) {
+//        TreeObject[] retVal = new TreeObject[BTree[indexNode].getNumElements()-1];
+//        for(int i = 0; i < BTree[indexNode].getNumElements()-1; i++){
+//            retVal[i] = BTree[indexNode].getElement(i);
+//            System.out.print(retVal[i].toString() + ", ");
+//        }
+//        System.out.print(retVal[0].toString() + ", ");
+//    }
 
     public int getNumberOfNodes() {
         return size;
