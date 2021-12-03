@@ -2,6 +2,8 @@ package cs321.btree;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.LinkedList;
+import java.util.Queue;
 
 //Test
 public class BTree{
@@ -88,23 +90,31 @@ public class BTree{
 //        }
 //    }
 
-    public TreeObject[] getArrayOfNodeContentsForNodeIndex(int indexNode) {
-//        TreeObject[] retVal = new TreeObject[BTree[indexNode].getNumElements()-1];
-        TreeObject[] retVal = BTree[indexNode].getArray();
-//        for(int i = 0; i < BTree[indexNode].getNumElements()-1; i++){
-//            retVal[i] = BTree[indexNode].getElement(i);
-//        }
+//    public TreeObject[] getArrayOfNodeContentsForNodeIndex(int indexNode) {
+//        TreeObject[] retVal = BTree[indexNode].getArray();
+//        return retVal;
+//    }
+
+
+    public BTreeNode getArrayOfNodeContentsForNodeIndex(int indexNode) throws BTreeException, IOException {
+        BTreeNode retVal = new BTreeNode(degree, file, address);
+        LinkedList<BTreeNode> nodesChecked = new LinkedList<BTreeNode>();
+        LinkedList<BTreeNode> BFS = new LinkedList<BTreeNode>();
+        nodesChecked.add(root());
+        BFS.add(root());
+        while(nodesChecked.size() <= indexNode){
+            BTreeNode thisNode = BFS.removeFirst();
+            if(thisNode.isLeaf()){
+                for(int i = 0; i < thisNode.getNumChildren(); i++){
+                    BTreeNode tempNode = thisNode.diskRead(thisNode.getChildAddress(i), null);
+                    BFS.add(tempNode);
+                    nodesChecked.add(tempNode);
+                }
+            }
+        }
+        retVal = BFS.get(indexNode);
         return retVal;
     }
-
-//    public void printNodeContentsForNodeIndex(int indexNode) {
-//        TreeObject[] retVal = new TreeObject[BTree[indexNode].getNumElements()-1];
-//        for(int i = 0; i < BTree[indexNode].getNumElements()-1; i++){
-//            retVal[i] = BTree[indexNode].getElement(i);
-//            System.out.print(retVal[i].toString() + ", ");
-//        }
-//        System.out.print(retVal[0].toString() + ", ");
-//    }
 
     public int getNumberOfNodes() {
         return size;
