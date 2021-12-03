@@ -60,7 +60,7 @@ public class BTree{
             } else {
                 if(size == 0){
                     size++;
-                }
+                }//
                 r.insertNonFull(Key);
             }
         }
