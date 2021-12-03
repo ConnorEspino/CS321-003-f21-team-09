@@ -267,9 +267,9 @@ public class BTreeNode {
         }
         TreeNode.array[index] = y.array[degree];
         TreeNode.size++;
-        y.diskWrite();
-        z.diskWrite();
-        TreeNode.diskWrite();
+        y.diskWrite(null);
+        z.diskWrite(null);
+        TreeNode.diskWrite(null);
         return z;
     }
 
