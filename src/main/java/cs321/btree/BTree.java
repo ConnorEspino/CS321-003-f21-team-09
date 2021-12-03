@@ -33,7 +33,7 @@ public class BTree{
 
 
     //good?
-    public TreeObject BTreeSearch(BTreeNode TreeNode, TreeObject Key){
+    public TreeObject BTreeSearch(BTreeNode TreeNode, TreeObject Key) throws BTreeException, IOException {
         int i = 1;
         while((i <= TreeNode.getNumElements()) && Key.getKey() > TreeNode.getElement(i).getKey()){
             i++;
@@ -43,7 +43,7 @@ public class BTree{
         } else if(TreeNode.isLeaf()){
             return null;
         } else {
-            BTreeNode nodeReturn = TreeNode.diskRead(TreeNode.getChildAddress(i));
+            BTreeNode nodeReturn = TreeNode.getChildAddress(i).diskRead();
             return BTreeSearch(nodeReturn, Key);
         }
     }
