@@ -41,7 +41,7 @@ public class GeneBankSearchBTree {
         if(useCache == 1){
             try{
                 //We're searching for a long, but can only access Node objects from the cache
-                cache.getObject(x);
+                cache.getObject(query);
             }catch (Exception e){
 
             }

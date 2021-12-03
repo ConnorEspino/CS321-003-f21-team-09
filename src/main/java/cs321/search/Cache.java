@@ -1,3 +1,5 @@
+package cs321.search;
+
 /**
  * Project 1
  * 

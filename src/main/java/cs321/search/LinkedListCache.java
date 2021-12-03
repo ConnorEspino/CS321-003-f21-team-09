@@ -1,3 +1,5 @@
+package cs321.search;
+
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
