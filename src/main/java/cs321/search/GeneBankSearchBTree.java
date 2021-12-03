@@ -17,7 +17,6 @@ import cs321.create.DNASequence;
 
 public class GeneBankSearchBTree {
     private GeneBankSearchBTreeArguments arguments;
-    private ByteBuffer buffer;
 
     //Change when you know metadata size
     private static int METADATA_SIZE = 8;
@@ -31,13 +30,13 @@ public class GeneBankSearchBTree {
      * @param x     The root node to start searching from
      * @return int How many occurances of subsequence query exist in BTree
      */
-    public int find(long address, long query) {
-        BTreeNode x = diskRead(address);
+    public int find(BTreeNode x, long query) {
+        
         //If we're using a cache, search that first
         if(arguments.useCache()){
             try{
-                //We're searching for a long, but can only access Node objects from the cache
-                cache.getObject(query);
+                //Why search the cache if we already have the node x?
+                cache.getObject(x);
             }catch (Exception e){
 
             }
@@ -45,17 +44,20 @@ public class GeneBankSearchBTree {
         }
 
         //Search starting at the end of the node.
-        for(int i = (2*degree) -1; i > 0; i--){
+        for(int i = (2*arguments.getDegree()) -1; i > 0; i--){
             //If we find a match, return the frequency of that sequence
             if(query == x.getElement(i).getKey()){
                 return x.getElement(i).getFrequency();
             }
             //If the thing we're searching for is greater than the current element, check right child.
-            if(query > x.getElement(i).getKey() && x.getChildAddress(i+1) != 0){
-                //TODO: Double check the check for if the child exists
-                find(x.getChildAddress(i+1), query);
+            if(query > x.getElement(i).getKey() && !x.isLeaf()){
+                BTreeNode child = new BTreeNode(arguments.getDegree(), arguments.getTreeFile(), x.getChildAddress(i+1));
+                find(child, query);
+            }else{
+                return (Integer) null;
             }
         }
+        return 0;
         
     }
 
@@ -63,10 +65,17 @@ public class GeneBankSearchBTree {
         arguments = new GeneBankSearchBTreeArguments(args);
         Scanner queryScan = new Scanner(arguments.getQueryFile());
 
-        //Open Btree file
         //TODO Do I create an entire Btree and then search through, or do I search through as Im building the btree?
         //TODO Do I only search by reading the disk or should I build A Btree while searching and search that until I come to something that hasn't been read yet
         //TODO The cache doesn't make sense to me since we need to read from the disk to get an object that we check if its in the cache already
+        RandomAccessFile treeFile = arguments.getTreeFile();
+        treeFile.seek(METADATA_SIZE);
+        
+        if(arguments.useCache()){
+            cache = new LinkedListCache<BTreeNode>(arguments.getCacheSize());
+        }
+        BTreeNode dummyNode = new BTreeNode(0, treeFile, 0);
+        BTreeNode x = dummyNode.diskRead(METADATA_SIZE);
 
         //Search file for frequency of each query in the query file
         while(queryScan.hasNextLine()){

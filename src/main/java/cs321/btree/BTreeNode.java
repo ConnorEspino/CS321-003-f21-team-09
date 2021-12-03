@@ -5,6 +5,8 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
 import cs321.create.DNASequence;
+import cs321.search.Cache;
+import cs321.search.LinkedListCache;
 
 public class BTreeNode {
     // A boolean which is true if this node is a leaf and otherwise false
@@ -19,8 +21,10 @@ public class BTreeNode {
     //Degree of the BTree
     private int degree;
     private RandomAccessFile file;
+    //Address of the BTreeNode
     private long address;
-    private ByteBuffer buffer;
+    LinkedListCache cache;
+
 
     /**
      * Constructor for BTreeNode
@@ -42,7 +46,7 @@ public class BTreeNode {
      * Writes the node information to the address of the BTreeNodein the binary data file
      * @throws IOException
      */
-    public void diskWrite() throws IOException{
+    public void diskWrite(LinkedListCache cache) throws IOException{
         file.seek(address);
         file.writeInt(size);
         for(int i = 0; i < size; i++){
@@ -57,6 +61,8 @@ public class BTreeNode {
                 file.writeLong(children[i]);
             }
         }
+        //Add this node object to the cache
+        cache.addObject(this);
     }
 
     /**
@@ -65,9 +71,23 @@ public class BTreeNode {
      * @throws IOException
      * @throws BTreeException
      */
-    public BTreeNode diskRead() throws IOException, BTreeException {
+    public BTreeNode diskRead(long address, LinkedListCache cache) throws IOException, BTreeException {
         if (address == 0) return null;
-        BTreeNode x = new BTreeNode(degree, file, address);
+        BTreeNode x  = null;
+
+        //Check if the cache exists
+        if(cache != null){
+            //If the cache exists search for the address
+            BTreeNode dummyNode = new BTreeNode(degree, file, address);
+            x = cache.getObject(dummyNode);
+        }
+        //If the cache didn't find any matches or there was no cache, make a new Node
+        if(x == null){
+            x = new BTreeNode(degree, file, address);
+        }else{
+            //If the cache found a match, return that node
+            return x;
+        }
         
         file.seek(address);
 
@@ -214,6 +234,14 @@ public class BTreeNode {
 
     public int getNumChildren(){
         return maxChildIndex;
+    }
+
+    public long getAddress(){        
+        return address;
+    }
+
+    public boolean equals(BTreeNode obj){
+        return (address == obj.getAddress());
     }
 
     public BTreeNode BTreeSplitChild(BTreeNode TreeNode, int index) throws BTreeException, IOException {

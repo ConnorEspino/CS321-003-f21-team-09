@@ -3,6 +3,8 @@ package cs321.search;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
+import cs321.btree.BTreeNode;
+
 /**
  * Project 1
  * 
@@ -11,32 +13,47 @@ import java.util.NoSuchElementException;
  * @author Connor Espino
  * @version Fall 2021
  */
-public class LinkedListCache<T> implements Cache<T> {
+public class LinkedListCache implements Cache<BTreeNode> {
 	//Linked list object
-	public LinkedList<T> list;
+	public LinkedList<BTreeNode> list;
 	//Size of the cache
 	int cacheSize;
 	//Object to return if in list
-	T returnObject;
+	BTreeNode returnObject;
 
 	/**
 	 * Constructor for LinkedListCache
 	 * @param cacheSize - Size of the cache
 	 */
 	public LinkedListCache(int cacheSize) {
-		list = new LinkedList<T>();
+		list = new LinkedList<BTreeNode>();
 		this.cacheSize = cacheSize;
 	}
 
 	@Override
-	public T getObject(T object) {
-		// Return element if it is in the cache.
-		returnObject = (T) list.get(list.indexOf(object));
-		return returnObject;
+	public BTreeNode getObject(BTreeNode object) {
+		// Remove object
+		try {
+			list.remove(object);
+		}catch(NoSuchElementException e) {
+			System.out.println("Object not in cache");
+			return null;
+		}
+		
+		//Add object to front of the cache
+		addObject(object);
+
+		return (BTreeNode) list.get(list.indexOf(object));
 	}
 
 	@Override
-	public void addObject(T object) {
+	public void clearCache() {
+		// Clears the linked list
+		list.clear();
+	}
+
+	@Override
+	public void addObject(BTreeNode object) {
 		// Checks if the cache is full. If it is then remove the last item.
 		if (list.size() == cacheSize) {
 			list.removeLast();
@@ -47,18 +64,11 @@ public class LinkedListCache<T> implements Cache<T> {
 	}
 
 	@Override
-	public void removeObject(T object) {
+	public void removeObject(BTreeNode object) {
 		try {
 			list.remove(object);
 		}catch(NoSuchElementException e) {
 			System.out.println("Object not in cache");
 		}
 	}
-
-	@Override
-	public void clearCache() {
-		// Clears the linked list
-		list.clear();
-	}
-
 }
