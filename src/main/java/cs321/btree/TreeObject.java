@@ -2,7 +2,12 @@ package cs321.btree;
 
 import cs321.create.DNASequence;
 
-public class TreeObject {
+/**
+ * Class for creating aa tree object to store DNASequences, and frequency of a DNA Sequence.
+ * 
+ * @author Connor Espino
+ */
+public class TreeObject implements Comparable<TreeObject>{
     private long key;
     private int frequency;
 
@@ -48,7 +53,7 @@ public class TreeObject {
      * @return int 0 if equal, -1 if less than, 1 if greater than the compared to
      *         object
      */
-    public int equals(TreeObject obj) {
+    public int compareTo(TreeObject obj) {
         if (key == obj.getKey())
             return 0;
         else if (key < obj.getKey())
@@ -57,6 +62,16 @@ public class TreeObject {
             return 1;
         else
             return 0;
+    }
+
+    /**
+     * Indicates whether another tree object is equal to this one by comparing the two key values.
+     * 
+     * @param obj The other tree object to compare to this one
+     * @return boolean True if the objects are equal, false otherwise
+     */
+    public boolean equals(TreeObject obj){
+        return key == obj.getKey();
     }
 
     /**

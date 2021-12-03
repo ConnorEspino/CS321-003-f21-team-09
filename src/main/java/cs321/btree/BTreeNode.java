@@ -44,12 +44,12 @@ public class BTreeNode {
         else {
             for (int i = size-1; i >= 0; i--) {
                 // If the object is a duplicate of one already in the list, increase the frequency of the one already in the list
-                if (obj.equals(array[i]) == 0) {
+                if (obj.compareTo(array[i]) == 0) {
                     array[i].increaseFrequency();
                 }
 
                 // If the object is greater than the object at index i, insert after that index.
-                if (obj.equals(array[i]) == 1) {
+                if (obj.compareTo(array[i]) == 1) {
 
                     // Shift elements over to make room for new insertion
                     for (int j = size; j > i+1; j--) {
