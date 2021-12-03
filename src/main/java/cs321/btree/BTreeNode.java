@@ -245,19 +245,19 @@ public class BTreeNode {
         return z;
     }
 
-    public void BTreeInsert(BTree bTree, TreeObject Key) throws BTreeException, IOException {
-        BTreeNode r = bTree.root();
-        if (r.getNumElements() == (2*degree)){
-            BTreeNode s = new BTreeNode(degree, file, address);
-            bTree.setRoot(s);
-            s.leaf = false;
-            s.size = 0;
-            s.setChildAddress(1, r.address);
-            BTreeSplitChild(s,1);
-            s.insertNonFull(Key);
-        } else {
-            r.insertNonFull(Key);
-        }
-    }
+//    public void BTreeInsert(BTree bTree, TreeObject Key) throws BTreeException, IOException {
+//        BTreeNode r = bTree.root();
+//        if (r.getNumElements() == (2*degree)){
+//            BTreeNode s = new BTreeNode(degree, file, address);
+//            bTree.setRoot(s);
+//            s.leaf = false;
+//            s.size = 0;
+//            s.setChildAddress(1, r.address);
+//            BTreeSplitChild(s,1);
+//            s.insertNonFull(Key);
+//        } else {
+//            r.insertNonFull(Key);
+//        }
+//    }
 
 }
