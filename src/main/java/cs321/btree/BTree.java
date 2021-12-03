@@ -43,7 +43,7 @@ public class BTree{
         } else if(TreeNode.isLeaf()){
             return null;
         } else {
-            BTreeNode nodeReturn = TreeNode.getChildAddress(i).diskRead();
+            BTreeNode nodeReturn = TreeNode.getChildAddress(i).diskRead(null);
             return BTreeSearch(nodeReturn, Key);
         }
     }
