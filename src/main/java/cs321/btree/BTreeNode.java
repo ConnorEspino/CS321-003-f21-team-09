@@ -1,5 +1,11 @@
 package cs321.btree;
 
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+
+import cs321.create.DNASequence;
+
 public class BTreeNode {
     // A boolean which is true if this node is a leaf and otherwise false
     private boolean leaf;
@@ -9,28 +15,90 @@ public class BTreeNode {
     private long children[];
     // The number of elements currently in the node
     private int size;
+    private int maxChildIndex;
     //Degree of the BTree
     private int degree;
+    private RandomAccessFile file;
+    private long address;
+    private ByteBuffer buffer;
 
     /**
      * Constructor for BTreeNode
      * @param degree The degree of the BTree that the node is in 
      */
-    public BTreeNode(int degree) {
+    public BTreeNode(int degree, RandomAccessFile file, long address) {
         size = 0;
         leaf = true;
         this.degree = degree;
+        this.file = file;
+        this.address = address;
+        maxChildIndex = 0;
         // Initialize array with a size of 2t-1
         array = new TreeObject[(2 * degree) - 1];
         children = new long[2*degree];
     }
 
     /**
-     * Insert a BTreeObject into the node, CAUTION: This assumes the Node is not currently full, a check that should be done before inserting in the BTree class.
+     * Writes the node information to the address of the BTreeNodein the binary data file
+     * @throws IOException
+     */
+    public void diskWrite() throws IOException{
+        file.seek(address);
+        file.writeInt(size);
+        for(int i = 0; i < size; i++){
+            file.writeLong(array[i].getKey());
+            file.writeInt(array[i].getFrequency());
+        }
+        if(leaf){
+            file.writeInt(1);
+        }else{
+            file.writeInt(0);
+            for(int i = 0; i < maxChildIndex; i++){
+                file.writeLong(children[i]);
+            }
+        }
+    }
+
+    /**
+     * Reads Node information and creates Node object using data from the binary file
+     * @return BTreeNode Node created from reading binary data
+     * @throws IOException
+     * @throws BTreeException
+     */
+    public BTreeNode diskRead() throws IOException, BTreeException {
+        if (address == 0) return null;
+        BTreeNode x = new BTreeNode(degree, file, address);
+        
+        file.seek(address);
+
+        int n = file.readInt();
+
+        x.size = n;
+
+        for(int i = 0; i < n; i++){
+            long value = file.readLong();
+            int freq = file.readInt();
+            TreeObject obj = new TreeObject(new DNASequence(value), freq);
+            x.array[i] = obj;
+        }
+
+        //If there are children, read the children and store them in the file.
+        if(file.readByte() == 0){
+            for(int i = 0; i < maxChildIndex; i++){
+                x.children[i] = file.readLong();
+            }
+        }
+
+        return x;
+    }
+
+    /**
+     * Insert a BTreeObject into the node
+     * CAUTION: This assumes the Node is not currently full, a check that should be done before inserting in the BTree class.
      * @param obj The object being inserted
      * @throws BTreeException If the node is full
      */
-    public void insert(TreeObject obj) throws BTreeException {
+    public void insertNonFull(TreeObject obj) throws BTreeException {
         if (array[array.length - 1] != null) {
             throw new BTreeException("Node is full, split before adding more elements");
         }
@@ -131,7 +199,7 @@ public class BTreeNode {
     /**
      * Sets the child node at the index to be the given node
      * @param index The index of the children array to store the child node
-     * @param node The child node to store at the given array
+     * @param address The child node to store at the given array//change this
      * @throws IndexOutOfBoundsException
      */
     public void setChildAddress(int index, long address){
@@ -140,6 +208,56 @@ public class BTreeNode {
         }
         children[index] = address;
         leaf = false;
+        if(index > maxChildIndex)
+            maxChildIndex = index;
+    }
+
+    public int getNumChildren(){
+        return maxChildIndex;
+    }
+
+    public BTreeNode BTreeSplitChild(BTreeNode TreeNode, int index) throws BTreeException, IOException {
+        BTreeNode z = new BTreeNode(degree, file, address);
+        BTreeNode y = new BTreeNode(degree, file, TreeNode.getChildAddress(index));
+        z.leaf = y.leaf;
+        z.size = degree - 1;
+        for (int j = 0; j < degree - 1; j++) {
+            z.array[j] = y.array[j + degree];
+        }
+        if (!y.isLeaf()) {
+            for (int j = 0; j < degree; j++) {
+                z.children[j] = y.children[j + degree];
+            }
+        }
+        y.size = degree - 1;
+        for (int j = TreeNode.getNumElements(); j > index + 1; j--) {
+            TreeNode.children[degree + j] = TreeNode.children[degree];
+        }
+        TreeNode.setChildAddress(index, z.address);
+        for (int j = TreeNode.getNumElements(); j > index; j--) {
+            TreeNode.array[degree + j] = TreeNode.array[degree];
+        }
+        TreeNode.array[index] = y.array[degree];
+        TreeNode.size++;
+        y.diskWrite();
+        z.diskWrite();
+        TreeNode.diskWrite();
+        return z;
+    }
+
+    public void BTreeInsert(BTree bTree, TreeObject Key) throws BTreeException, IOException {
+        BTreeNode r = bTree.root();
+        if (r.getNumElements() == (2*degree)){
+            BTreeNode s = new BTreeNode(degree, file, address);
+            bTree.setRoot(s);
+            s.leaf = false;
+            s.size = 0;
+            s.setChildAddress(1, r.address);
+            BTreeSplitChild(s,1);
+            s.insertNonFull(Key);
+        } else {
+            r.insertNonFull(Key);
+        }
     }
 
 }
