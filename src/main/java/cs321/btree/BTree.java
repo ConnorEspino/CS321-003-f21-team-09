@@ -2,6 +2,8 @@ package cs321.btree;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.LinkedList;
+import java.util.Queue;
 
 //Test
 public class BTree{
@@ -49,21 +51,21 @@ public class BTree{
     }
 
     public void BTreeInsert(TreeObject Key) throws BTreeException, IOException {
-            BTreeNode r = root();
-            if (r.getNumElements() == (2*degree)){
-                BTreeNode s = new BTreeNode(degree, file, address);
-                setRoot(s);
-                s.setChildAddress(1, r.getAddress());
-                s.BTreeSplitChild(s,1);
-                if(size == 1){
-                    size++;
-                }
+        BTreeNode r = root();
+        if (r.getNumElements() == (2*degree)){
+            BTreeNode s = new BTreeNode(degree, file, address);
+            setRoot(s);
+            s.setChildAddress(1, r.getAddress());
+            s.BTreeSplitChild(s,1);
+            size++;
+            s.insertNonFull(Key);
+        } else {
+            if(size == 0){
                 size++;
-                s.insertNonFull(Key);
-            } else {
-                r.insertNonFull(Key);
             }
+            r.insertNonFull(Key);
         }
+    }
 
     //good?
 //    private void BTreeInsertNonFull(BTreeNode TreeNode, TreeObject key) throws BTreeException {
@@ -88,11 +90,29 @@ public class BTree{
 //        }
 //    }
 
-    public TreeObject[] getArrayOfNodeContentsForNodeIndex(int indexNode) {
-        TreeObject[] retVal = new TreeObject[BTree[indexNode].getNumElements()-1];
-        for(int i = 0; i < BTree[indexNode].getNumElements()-1; i++){
-            retVal[i] = BTree[indexNode].getElement(i);
+//    public TreeObject[] getArrayOfNodeContentsForNodeIndex(int indexNode) {
+//        TreeObject[] retVal = BTree[indexNode].getArray();
+//        return retVal;
+//    }
+
+
+    public BTreeNode getArrayOfNodeContentsForNodeIndex(int indexNode) throws BTreeException, IOException {
+        BTreeNode retVal = new BTreeNode(degree, file, address);
+        LinkedList<BTreeNode> nodesChecked = new LinkedList<BTreeNode>();
+        LinkedList<BTreeNode> BFS = new LinkedList<BTreeNode>();
+        nodesChecked.add(root());
+        BFS.add(root());
+        while(nodesChecked.size() <= indexNode){
+            BTreeNode thisNode = BFS.removeFirst();
+            if(thisNode.isLeaf()){
+                for(int i = 0; i < thisNode.getNumChildren(); i++){
+                    BTreeNode tempNode = thisNode.diskRead(thisNode.getChildAddress(i), null);
+                    BFS.add(tempNode);
+                    nodesChecked.add(tempNode);
+                }
+            }
         }
+        retVal = BFS.get(indexNode);
         return retVal;
     }
 
