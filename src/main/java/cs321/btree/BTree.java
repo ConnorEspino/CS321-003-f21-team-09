@@ -55,6 +55,10 @@ public class BTree{
                 setRoot(s);
                 s.setChildAddress(1, r.getAddress());
                 s.BTreeSplitChild(s,1);
+                if(size == 1){
+                    size++;
+                }
+                size++;
                 s.insertNonFull(Key);
             } else {
                 r.insertNonFull(Key);
