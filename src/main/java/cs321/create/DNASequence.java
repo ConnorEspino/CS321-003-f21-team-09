@@ -18,7 +18,6 @@ public class DNASequence {
      */
     public DNASequence(String sequence) {
         sequenceString = sequence;
-        size = 0;
         for (int i = 0; i < sequence.length(); i++) {
             list = list << 2;
             switch (sequence.charAt(i)) {
