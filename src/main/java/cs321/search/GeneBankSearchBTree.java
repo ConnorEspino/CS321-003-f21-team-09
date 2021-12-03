@@ -16,11 +16,7 @@ import cs321.common.ParseArgumentUtils;
 import cs321.create.DNASequence;
 
 public class GeneBankSearchBTree {
-    private int useCache;
-    private int cacheSize;
-    private int debugLevel;
-    private int degree;
-    private FileChannel file;
+    private GeneBankSearchBTreeArguments arguments;
     private ByteBuffer buffer;
 
     //Change when you know metadata size
@@ -38,7 +34,7 @@ public class GeneBankSearchBTree {
     public int find(long address, long query) {
         BTreeNode x = diskRead(address);
         //If we're using a cache, search that first
-        if(useCache == 1){
+        if(arguments.useCache()){
             try{
                 //We're searching for a long, but can only access Node objects from the cache
                 cache.getObject(query);
@@ -64,43 +60,9 @@ public class GeneBankSearchBTree {
     }
 
     public void main(String[] args) throws Exception {
-        if(args.length < 3){
-            //print usage message & exit
-        }
-        Scanner queryScan;
-        
-        RandomAccessFile treeFile = new RandomAccessFile(args[1], "r");
-        File queryFile = new File(args[2]);
+        arguments = new GeneBankSearchBTreeArguments(args);
+        Scanner queryScan = new Scanner(arguments.getQueryFile());
 
-        //Check if user asked for cache and create scanner for file
-        try{
-            int useCache = Integer.parseInt(args[0]);
-            queryScan = new Scanner(queryFile);
-        }catch(Exception e){
-            //Print usage message & exit
-        }
-
-        //Set cache size
-        if(args.length > 3 && useCache == 1){
-            try{
-                int cacheSize = Integer.parseInt(args[3]);
-                cache = new LinkedListCache<BTreeNode>(cacheSize);
-            }catch(Exception e){
-                //Print usage message and exit
-            }
-        }
-
-        //Set debug level
-        if(args.length > 4){
-            debugLevel = Integer.parseInt(args[4]);
-        }else if(useCache == 0 && args.length > 3){
-            debugLevel = Integer.parseInt(args[3]);
-        }else{
-            debugLevel = 0;
-        }
-
-        //End of argument parsing
-        
         //Open Btree file
         //TODO Do I create an entire Btree and then search through, or do I search through as Im building the btree?
         //TODO Do I only search by reading the disk or should I build A Btree while searching and search that until I come to something that hasn't been read yet
