@@ -62,7 +62,9 @@ public class BTreeNode {
             }
         }
         //Add this node object to the cache
-        cache.addObject(this);
+        if(cache != null){
+            cache.addObject(this);
+        }
     }
 
     /**
