@@ -205,6 +205,10 @@ public class BTreeNode {
         return array[index];
     }
 
+    public TreeObject[] getArray(){
+        return array;
+    }
+
     /**
      * Returns the child at the given index of the children array
      * @param index The index of the child to access
