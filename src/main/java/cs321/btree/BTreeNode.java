@@ -2,10 +2,8 @@ package cs321.btree;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
 
 import cs321.create.DNASequence;
-import cs321.search.Cache;
 import cs321.search.LinkedListCache;
 
 public class BTreeNode {
@@ -62,7 +60,9 @@ public class BTreeNode {
             }
         }
         //Add this node object to the cache
-        cache.addObject(this);
+        if(cache != null){
+            cache.addObject(this);
+        }
     }
 
     /**
@@ -201,6 +201,10 @@ public class BTreeNode {
             throw new IndexOutOfBoundsException("Invalid index");
         }
         return array[index];
+    }
+
+    public TreeObject[] getArray(){
+        return array;
     }
 
     /**
