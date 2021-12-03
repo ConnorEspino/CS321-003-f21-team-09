@@ -2,9 +2,9 @@
 
 Last Name       | First Name      | GitHub User Name
 --------------- | --------------- | --------------------
-TBD             | TBD             | TBD
-TBD             | TBD             | TBD
-TBD             | TBD             | TBD
+Swierstra       | Jacob           | JacobSwierstra
+Reiner          | Ken             | RockstarFox
+Espino          | Connor          | ConnorEspino
 TBD             | TBD             | TBD
 TBD             | TBD             | TBD
 
@@ -12,7 +12,7 @@ TBD             | TBD             | TBD
 TBD
 
 # BTree Binary File Format and Layout
-TBD
+(int Number of Elements in Node)\[for each node: (long TreeObject key)(int TreeObject frequency)](byte isLeaf (1 for yes, 0 for no))\[If not a leaf, for each child: (long Address of child node)]
 
 # Additional Notes
 TBD
