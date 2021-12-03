@@ -49,7 +49,7 @@ public class BTree{
     }//change
 
     public void BTreeInsert(TreeObject Key) throws BTreeException, IOException {
-            BTreeNode r = BTree.root();
+            BTreeNode r = root();
             if (r.getNumElements() == (2*degree)){
                 BTreeNode s = new BTreeNode(degree, file, address);
                 setRoot(s);
