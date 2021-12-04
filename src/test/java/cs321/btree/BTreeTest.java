@@ -27,7 +27,7 @@ public class BTreeTest
         bTree.BTreeInsert(insert);
         TreeObject insert2 = new TreeObject(new DNASequence("T"));
         bTree.BTreeInsert(insert2);
-        TreeObject insert3 = new TreeObject(new DNASequence("T"));
+        TreeObject insert3 = new TreeObject(new DNASequence("G"));
         bTree.BTreeInsert(insert3);
         // it is expected that these nodes values will appear in the tree when
         // using a level traversal (i.e., root, then level 1 from left to right, then
