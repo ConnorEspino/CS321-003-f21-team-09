@@ -52,11 +52,14 @@ public class BTree{
 
     public void BTreeInsert(TreeObject Key) throws BTreeException, IOException {
         BTreeNode r = root();
-        if (r.getNumElements() == (2*degree)){
+        if (r.getNumElements() == (2*degree)-1){
             BTreeNode s = new BTreeNode(degree, file, address);
             setRoot(s);
-            s.setChildAddress(1, r.getAddress());
-            s.BTreeSplitChild(s,1);
+            s.setChildAddress(0, r.getAddress());
+            s.BTreeSplitChild(s,0);
+            if(size == 1){
+               size++;
+            }
             size++;
             s.insertNonFull(Key);
         } else {
