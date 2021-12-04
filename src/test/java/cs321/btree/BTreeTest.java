@@ -1,6 +1,11 @@
 package cs321.btree;
 
+import cs321.create.DNASequence;
 import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,18 +17,25 @@ public class BTreeTest
     //  assert that the constructed tree has the expected number of nodes and
     //  assert that some (or all) of the nodes have the expected values
     @Test
-    public void btreeDegree4Test() {
+    public void btreeDegree4Test() throws IOException, BTreeException {
         //TODO instantiate and populate a bTree object
-        BTree bTree = new BTree(6);
-        int expectedNumberOfNodes = 3;
+        RandomAccessFile file = new RandomAccessFile("src/test/java/cs321/btree/test", "rw");
+        BTree bTree = new BTree(2, file, 2);
+        int expectedNumberOfNodes = 1;
 
+        TreeObject insert = new TreeObject(new DNASequence("A"));
+        bTree.BTreeInsert(insert);
+        TreeObject insert2 = new TreeObject(new DNASequence("T"));
+        bTree.BTreeInsert(insert2);
+        TreeObject insert3 = new TreeObject(new DNASequence("G"));
+        bTree.BTreeInsert(insert3);
         // it is expected that these nodes values will appear in the tree when
         // using a level traversal (i.e., root, then level 1 from left to right, then
         // level 2 from left to right, etc.)
         String[] expectedNodesContent = new String[]{
-                "2, 3",      //root content
-                "1",           //first child of root content
-                "4, 5, 6", //second child of root content
+                "A, G, T"      //root content
+                //first child of root content
+                //second child of root content
         };
 
         assertEquals(expectedNumberOfNodes, bTree.getNumberOfNodes());

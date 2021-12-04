@@ -93,22 +93,17 @@ public class TreeObject implements Comparable<TreeObject>{
 
     public String toString(){
         String sequenceString = "";
-        String listString = String.valueOf(key);
+        String listString = Long.toBinaryString(key);
         
         for (int i = 0; i < listString.length(); i++) {
-            switch (listString.substring(i, i+1)) {
-                case "00":
-                    sequenceString = sequenceString + 'A';
-                break;
-                case "11":
-                    sequenceString = sequenceString + 'T';
-                break;
-                case "01":
-                    sequenceString = sequenceString + 'C';
-                break;
-                case "10":
-                    sequenceString = sequenceString + 'G';
-                break;
+            if(listString.equals("00")){
+                sequenceString = sequenceString + 'A';
+            }else if(listString.equals("11")){
+                sequenceString = sequenceString + 'T';
+            }else if(listString.equals("01")){
+                sequenceString = sequenceString + 'C';
+            }else if(listString.equals("10")){
+                sequenceString = sequenceString + 'G';
             }
             i++;
         }
