@@ -278,14 +278,13 @@ public class BTreeNode {
     }
 
     public String toString(){
-        String retStr = "[";
+        String retStr = "";
         for(int i = 0; i < size; i++){
             if(i != 0){
                 retStr += ", ";
             }
             retStr += array[i].toString();
         }
-        retStr += "]";
         return retStr;
     }
 
