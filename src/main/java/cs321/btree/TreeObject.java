@@ -90,4 +90,29 @@ public class TreeObject implements Comparable<TreeObject>{
     public int getFrequency() {
         return frequency;
     }
+
+    public String toString(){
+        String sequenceString = "";
+        String listString = String.valueOf(key);
+        
+        for (int i = 0; i < listString.length(); i++) {
+            switch (listString.substring(i, i+1)) {
+                case "00":
+                    sequenceString = sequenceString + 'A';
+                break;
+                case "11":
+                    sequenceString = sequenceString + 'T';
+                break;
+                case "01":
+                    sequenceString = sequenceString + 'C';
+                break;
+                case "10":
+                    sequenceString = sequenceString + 'G';
+                break;
+            }
+            i++;
+        }
+
+        return sequenceString;
+    }
 }

@@ -7,11 +7,11 @@ import cs321.btree.BTreeNode;
 import cs321.create.DNASequence;
 
 public class GeneBankSearchBTree {
-    private GeneBankSearchBTreeArguments arguments;
+    private static GeneBankSearchBTreeArguments arguments;
 
     //Change when you know metadata size
     private static int METADATA_SIZE = 8;
-    private LinkedListCache cache;
+    private static LinkedListCache cache;
 
 
     /**
@@ -21,7 +21,7 @@ public class GeneBankSearchBTree {
      * @param x     The root node to start searching from
      * @return int How many occurances of subsequence query exist in BTree
      */
-    public int find(BTreeNode x, long query) {
+    public static int find(BTreeNode x, long query) {
         //Search starting at the end of the node.
         for(int i = (2*arguments.getDegree()) -1; i > 0; i--){
             //If we find a match, return the frequency of that sequence
@@ -40,7 +40,7 @@ public class GeneBankSearchBTree {
         
     }
 
-    public void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         arguments = new GeneBankSearchBTreeArguments(args);
         Scanner queryScan = new Scanner(arguments.getQueryFile());
 
