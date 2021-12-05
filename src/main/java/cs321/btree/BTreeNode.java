@@ -249,7 +249,7 @@ public class BTreeNode {
     }
 
     public BTreeNode BTreeSplitChild(BTreeNode TreeNode, int index) throws BTreeException, IOException {
-        if(index < 0 || index >= (2*degree)){
+        if(index < 0 || index >= (2*degree-1)){
             throw new IndexOutOfBoundsException("Invalid index");
         }
         BTreeNode z = new BTreeNode(degree, file, address);
@@ -265,12 +265,13 @@ public class BTreeNode {
             }
         }
         y.size = degree - 1;
-        for (int j = TreeNode.getNumElements(); j > index + 1; j--) {
-            TreeNode.children[degree + j] = TreeNode.children[degree];
+        for (int j = TreeNode.getNumElements()+1; j > index+1; j--) {
+            TreeNode.children[j+1] = TreeNode.children[j];
         }
         TreeNode.setChildAddress(index, z.address);
+//        TreeNode.children[index+1] = z.array[degree-1].getKey();
         for (int j = TreeNode.getNumElements(); j > index; j--) {
-            TreeNode.array[degree + j] = TreeNode.array[degree];
+            TreeNode.array[j+1] = TreeNode.array[j];
         }
         TreeNode.array[index] = y.array[degree];
         TreeNode.size++;
