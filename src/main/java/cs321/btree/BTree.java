@@ -56,10 +56,10 @@ public class BTree{
             BTreeNode s = new BTreeNode(degree, file, address);
             setRoot(s);
             s.setChildAddress(0, r.getAddress());
-            s.BTreeSplitChild(s,0);
-            if(size == 1){
-               size++;
-            }
+            s = r.BTreeSplitChild(r,0);
+//            if(size == 1){
+//               size++;
+//            }
             size++;
             s.insertNonFull(Key);
         } else {
