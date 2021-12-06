@@ -122,7 +122,6 @@ public class BTreeNode {
         if (array[array.length - 1] != null) {
             throw new BTreeException("Node is full, split before adding more elements");
         }
-
         // Empty list insertion
         if (size == 0) {
             array[0] = obj;
@@ -157,7 +156,6 @@ public class BTreeNode {
                     size++;
                     break;
                 }
-
                 // If the whole array has been iterated through and no placement was found,
                 // insert at the beginning of the array
                 if (i == 0) {
@@ -268,7 +266,7 @@ public class BTreeNode {
         for (int j = TreeNode.getNumElements()+1; j > index+1; j--) {
             TreeNode.children[j+1] = TreeNode.children[j];
         }
-        TreeNode.setChildAddress(index, z.address);
+        TreeNode.setChildAddress(index+1, z.address);
 //        TreeNode.children[index+1] = z.array[degree-1].getKey();
         for (int j = TreeNode.getNumElements(); j > index; j--) {
             TreeNode.array[j+1] = TreeNode.array[j];
