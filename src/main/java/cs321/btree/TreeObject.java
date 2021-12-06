@@ -96,11 +96,11 @@ public class TreeObject implements Comparable<TreeObject>{
         String listString = Long.toBinaryString(key);
         
         for (int i = 0; i < listString.length(); i++) {
-            if(listString.equals("00")){
+            if(listString.equals("0")){
                 sequenceString = sequenceString + 'A';
             }else if(listString.equals("11")){
                 sequenceString = sequenceString + 'T';
-            }else if(listString.equals("01")){
+            }else if(listString.equals("1")){
                 sequenceString = sequenceString + 'C';
             }else if(listString.equals("10")){
                 sequenceString = sequenceString + 'G';
