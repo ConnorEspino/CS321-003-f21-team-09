@@ -250,26 +250,27 @@ public class BTreeNode {
         if(index < 0 || index >= (2*degree-1)){
             throw new IndexOutOfBoundsException("Invalid index");
         }
-        BTreeNode z = new BTreeNode(degree, file, address);
-        BTreeNode y = new BTreeNode(degree, file, TreeNode.getChildAddress(index));
+
+        BTreeNode y = TreeNode;
+        BTreeNode z = y;
         z.leaf = y.leaf;
         z.size = degree - 1;
-        for (int j = 0; j < degree - 1; j++) {
-            z.array[j] = y.array[j + degree];
+        for (int j = 0; j <= degree/2 ; j++) {
+            z.array[j] = y.array[(j + degree)-1];
         }
         if (!y.isLeaf()) {
             for (int j = 0; j < degree; j++) {
-                z.children[j] = y.children[j + degree];
+                z.children[j] = y.children[(j + degree)-1];
             }
         }
-        y.size = degree - 1;
-        for (int j = TreeNode.getNumElements()+1; j > index+1; j--) {
+        y.size = degree -1;
+        for (int j = (TreeNode.getNumElements())-2; j > index; j--) {
             TreeNode.children[j+1] = TreeNode.children[j];
         }
-        TreeNode.setChildAddress(index+1, z.address);
+        TreeNode.setChildAddress(index, z.address);
 //        TreeNode.children[index+1] = z.array[degree-1].getKey();
-        for (int j = TreeNode.getNumElements(); j > index; j--) {
-            TreeNode.array[j+1] = TreeNode.array[j];
+        for (int t = TreeNode.getNumElements()-2; t > index-1; t--) {
+            TreeNode.array[t+1] = TreeNode.array[t];
         }
         TreeNode.array[index] = y.array[degree];
         TreeNode.size++;
