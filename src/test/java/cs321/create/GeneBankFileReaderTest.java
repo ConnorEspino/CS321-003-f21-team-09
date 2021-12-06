@@ -51,8 +51,22 @@ public class GeneBankFileReaderTest
 
     @Test
     public void ValidSequence_EndOfFile_ReturnNull() throws FileNotFoundException, GeneBankFileException{
-        reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFileShort.txt", 200);
+        reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFileShort.txt", 10);
+        for(int i = 0; i < 50; i++){
+            reader.getNextSequence();
+            
+        }
         assertEquals(null, reader.getNextSequence());
+    }
+
+    @Test
+    public void largeSeqLen_constructor_GeneBankFileException() throws FileNotFoundException{
+        try {
+            reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFileShort.txt", 200);
+            assert(false);
+        } catch (GeneBankFileException e) {
+        }
+        
     }
 
     @Test
