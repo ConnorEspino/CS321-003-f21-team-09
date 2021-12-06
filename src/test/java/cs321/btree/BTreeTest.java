@@ -21,21 +21,23 @@ public class BTreeTest
         //TODO instantiate and populate a bTree object
         RandomAccessFile file = new RandomAccessFile("src/test/java/cs321/btree/test", "rw");
         BTree bTree = new BTree(2, file, 2);
-        int expectedNumberOfNodes = 1;
+        int expectedNumberOfNodes = 3;
 
-        TreeObject insert = new TreeObject(new DNASequence("A"));
+        TreeObject insert = new TreeObject(new DNASequence("T"));
         bTree.BTreeInsert(insert);
-        TreeObject insert2 = new TreeObject(new DNASequence("T"));
+        TreeObject insert2 = new TreeObject(new DNASequence("A"));
         bTree.BTreeInsert(insert2);
-        TreeObject insert3 = new TreeObject(new DNASequence("G"));
+        TreeObject insert3 = new TreeObject(new DNASequence("C"));
         bTree.BTreeInsert(insert3);
+        TreeObject insert4 = new TreeObject(new DNASequence("G"));
+        bTree.BTreeInsert(insert4);
         // it is expected that these nodes values will appear in the tree when
         // using a level traversal (i.e., root, then level 1 from left to right, then
         // level 2 from left to right, etc.)
         String[] expectedNodesContent = new String[]{
-                "A, G, T"      //root content
-                //first child of root content
-                //second child of root content
+                "G",       //root content
+                "A, C",//first child of root content
+                "T",//second child of root content
         };
 
         assertEquals(expectedNumberOfNodes, bTree.getNumberOfNodes());

@@ -56,12 +56,10 @@ public class BTree{
             BTreeNode s = new BTreeNode(degree, file, address);
             setRoot(s);
             s.setChildAddress(0, r.getAddress());
-            s = r.BTreeSplitChild(r,0);
-//            if(size == 1){
-//               size++;
-//            }
-            size++;
+            r = s.BTreeSplitChild(r,0);
+            size+=2;
             s.insertNonFull(Key);
+//            BTreeInsert(Key);
         } else {
             if(size == 0){
                 size++;
@@ -105,9 +103,11 @@ public class BTree{
         LinkedList<BTreeNode> BFS = new LinkedList<BTreeNode>();
         nodesChecked.add(root());
         BFS.add(root());
+        BTreeNode thisNode = new BTreeNode(degree, file, address);
         while(nodesChecked.size() <= indexNode){
-            BTreeNode thisNode = BFS.removeFirst();
-            if(thisNode.isLeaf()){
+//            thisNode = thisNode.diskRead(BFS.removeFirst().getAddress(), null);
+            thisNode = BFS.removeFirst();
+            if(!thisNode.isLeaf()){
                 for(int i = 0; i < thisNode.getNumChildren(); i++){
                     BTreeNode tempNode = thisNode.diskRead(thisNode.getChildAddress(i), null);
                     BFS.add(tempNode);
@@ -115,7 +115,9 @@ public class BTree{
                 }
             }
         }
-        retVal = BFS.get(indexNode);
+//        retVal = BFS.get(indexNode);
+        retVal = nodesChecked.get(indexNode);
+        //retVal = thisNode.diskRead(nodesChecked.get(indexNode).getAddress(), null);
         return retVal;
     }
 
