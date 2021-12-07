@@ -44,7 +44,15 @@ public class GeneBankFileReader {
 
         //Build the initial DNA sequence for the given length
         for(int i = 0; i < seqLength; i++){
-            build.append(nextValidChar());
+            //Get the next character and append to current sequence
+            String validChar = nextValidChar();
+
+            //Check if we're at the end of the file. Return null if we are
+            if(validChar != null){
+                build.append(validChar);
+            }else{
+                throw new GeneBankFileException("Error: No valid sequences of length " + length);
+            }
         }
         
     }
@@ -65,7 +73,7 @@ public class GeneBankFileReader {
 
         //Check if we're at the end of the file. Return null if we are
         if(validChar != null){
-            build.append(nextValidChar());
+            build.append(validChar);
         }else{
             return null;
         }
@@ -89,6 +97,10 @@ public class GeneBankFileReader {
         //If the next character is not a DNA base then try adding the next character
         while(!nextChar.equals("a") && !nextChar.equals("c") && !nextChar.equals("t") && !nextChar.equals("g")){
             nextChar = scan.next();
+            //Check if the scanner has reached the end of the readable DNA sequence
+            if(nextChar.equals("/")){
+                return null;
+            }
         }
         return nextChar;
     }
