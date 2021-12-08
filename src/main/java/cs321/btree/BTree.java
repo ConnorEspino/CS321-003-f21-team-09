@@ -24,6 +24,16 @@ public class BTree{
         setRoot(x);
     }
 
+    public BTree(int degree, RandomAccessFile file) throws IOException {
+        BTree = new BTreeNode[4096];
+        size = 0;
+        this.degree = degree;
+        this.file = file;
+        BTreeNode x = new BTreeNode(degree, file, address);
+        x.diskWrite(null);
+        setRoot(x);
+    }
+
     public BTreeNode root() {
         BTreeNode root = BTree[0];
         return root;
@@ -56,10 +66,9 @@ public class BTree{
             BTreeNode s = new BTreeNode(degree, file, address);
             setRoot(s);
             s.setChildAddress(0, r.getAddress());
-            r = s.BTreeSplitChild(r,0);
+            s.BTreeSplitChild(0);
             size+=2;
             s.insertNonFull(Key);
-//            BTreeInsert(Key);
         } else {
             if(size == 0){
                 size++;
@@ -67,35 +76,6 @@ public class BTree{
             r.insertNonFull(Key);
         }
     }
-
-    //good?
-//    private void BTreeInsertNonFull(BTreeNode TreeNode, TreeObject key) throws BTreeException {
-//        int i = TreeNode.getNumElements();
-//        if(TreeNode.isLeaf() && i != degree){
-//                TreeNode.insert(key);
-//
-////                DiskWrite(key);
-//        } else if(TreeNode.isLeaf() && i == degree){
-//            while(i > 1 && TreeNode.getElement(i).getKey() > key.getKey()){
-//                i--;
-//            }
-//            i++;
-////            DiskRead(TreeNode.getElement(i))
-//            if(i == (2*degree-1)){
-//                BTreeNode child = BTreeSplitChild(TreeNode, i);
-//                if(key.getKey() > TreeNode.getElement(i).getKey()){
-//                    i++;
-//                }
-//                BTreeInsertNonFull(child, key);
-//            }
-//        }
-//    }
-
-//    public TreeObject[] getArrayOfNodeContentsForNodeIndex(int indexNode) {
-//        TreeObject[] retVal = BTree[indexNode].getArray();
-//        return retVal;
-//    }
-
 
     public BTreeNode getArrayOfNodeContentsForNodeIndex(int indexNode) throws BTreeException, IOException {
         BTreeNode retVal = new BTreeNode(degree, file, address);
@@ -105,8 +85,8 @@ public class BTree{
         BFS.add(root());
         BTreeNode thisNode = new BTreeNode(degree, file, address);
         while(nodesChecked.size() <= indexNode){
-//            thisNode = thisNode.diskRead(BFS.removeFirst().getAddress(), null);
-            thisNode = BFS.removeFirst();
+            thisNode = thisNode.diskRead(BFS.removeFirst().getAddress(), null);
+//            thisNode = BFS.removeFirst();
             if(!thisNode.isLeaf()){
                 for(int i = 0; i < thisNode.getNumChildren(); i++){
                     BTreeNode tempNode = thisNode.diskRead(thisNode.getChildAddress(i), null);
@@ -116,8 +96,8 @@ public class BTree{
             }
         }
 //        retVal = BFS.get(indexNode);
-        retVal = nodesChecked.get(indexNode);
-        //retVal = thisNode.diskRead(nodesChecked.get(indexNode).getAddress(), null);
+//        retVal = nodesChecked.get(indexNode);
+        retVal = thisNode.diskRead(nodesChecked.get(indexNode).getAddress(), null);
         return retVal;
     }
 
@@ -125,14 +105,4 @@ public class BTree{
         return size;
     }
 
-//    //TODO?
-//    public int returnIndex(BTreeNode Object){
-//        int index = -1;
-//        for(int i = 0; i < size; i++){
-//            if(BTree[i].equals(Object)){
-//                index = i;
-//            }
-//        }
-//        return index;
-//    }
 }
