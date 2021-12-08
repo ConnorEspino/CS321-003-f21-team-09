@@ -27,6 +27,8 @@ public class BTreeNode {
     /**
      * Constructor for BTreeNode
      * @param degree The degree of the BTree that the node is in 
+     * @param file  The file to read and write the node to
+     * @param address The address in the File to read and write the node to
      */
     public BTreeNode(int degree, RandomAccessFile file, long address) {
         size = 0;
@@ -34,6 +36,23 @@ public class BTreeNode {
         this.degree = degree;
         this.file = file;
         this.address = address;
+        maxChildIndex = 0;
+        // Initialize array with a size of 2t-1
+        array = new TreeObject[(2 * degree) - 1];
+        children = new long[2*degree];
+    }
+
+    /**
+     * Constructor for BTreeNode without adress intially set to a value
+     * @param degree The degree of the BTree that the node is in 
+     * @param file  The file to read and write the node to
+     * @param address The address in the File to read and write the node to
+     */
+    public BTreeNode(int degree, RandomAccessFile file){
+        size = 0;
+        leaf = true;
+        this.degree = degree;
+        this.file = file;
         maxChildIndex = 0;
         // Initialize array with a size of 2t-1
         array = new TreeObject[(2 * degree) - 1];
