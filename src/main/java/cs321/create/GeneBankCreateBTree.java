@@ -1,45 +1,58 @@
 package cs321.create;
 
 import cs321.btree.BTree;
+import cs321.btree.TreeObject;
 import cs321.common.ParseArgumentException;
 
 import java.io.*;
 import java.util.List;
 
-public class GeneBankCreateBTree
-{
+public class GeneBankCreateBTree {
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         System.out.println("Hello world from cs321.create.GeneBankCreateBTree.main");
         GeneBankCreateBTreeArguments geneBankCreateBTreeArguments = parseArgumentsAndHandleExceptions(args);
-
-
+        BTree createdBTree = new BTree(geneBankCreateBTreeArguments);
+        String FileName = args[2];
+        GeneBankFileReader reader = new GeneBankFileReader(FileName, 0);
+        TreeObject sequence = null;
+        while(reader.hasNextSequence()) {
+            sequence = new TreeObject(reader.getNextSequence());
+            createdBTree.BTreeInsert(sequence);
+        }
     }
 
-    private static GeneBankCreateBTreeArguments parseArgumentsAndHandleExceptions(String[] args)
-    {
+    private static GeneBankCreateBTreeArguments parseArgumentsAndHandleExceptions(String[] args) {
         GeneBankCreateBTreeArguments geneBankCreateBTreeArguments = null;
-        try
-        {
+        try {
             geneBankCreateBTreeArguments = parseArguments(args);
         }
-        catch (ParseArgumentException e)
-        {
+        catch (ParseArgumentException e) {
             printUsageAndExit(e.getMessage());
         }
         return geneBankCreateBTreeArguments;
     }
 
-    private static void printUsageAndExit(String errorMessage)
-    {
-
+    private static void printUsageAndExit(String errorMessage) {
+        System.out.println(errorMessage+ "USAGE: <0/1(no/with Cache)> <degree> <gbk_file> <subsequence_length> [<cache_size>] [<debug_level>]");
         System.exit(1);
     }
 
-    public static GeneBankCreateBTreeArguments parseArguments(String[] args) throws ParseArgumentException
-    {
-        return null;
+    public static GeneBankCreateBTreeArguments parseArguments(String[] args) throws ParseArgumentException {
+        if(args[0].equals("1")){
+            boolean useCache = true;
+        } else if (args[0].equals("0")){
+            boolean useCache = false;
+        } else {
+            printUsageAndExit("Use 0 for no Cache, 1 for use Cache\n");
+        }
+        int degree = Integer.parseInt(args[1]);
+        String gbkFileName = args[2];
+        int subsequenceLength = Integer.parseInt(args[3]);
+        int cacheSize = Integer.parseInt(args[4]);
+        int debugLevel = Integer.parseInt(args[5]);
+        GeneBankCreateBTreeArguments parsedArgs = new GeneBankCreateBTreeArguments(useCache, degree, gbkFileName, subsequenceLength, cacheSize, debugLevel);
+        return parsedArgs;
     }
 
 }

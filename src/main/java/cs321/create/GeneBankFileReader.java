@@ -8,6 +8,7 @@ public class GeneBankFileReader {
     private File file;
     private Scanner scan;
     private int seqLength;
+    private StringBuilder build;
 
     /**
      * Constructor for GeneBankFileReader class
@@ -37,6 +38,23 @@ public class GeneBankFileReader {
 
         //Sets the sequence length
         seqLength = length;
+
+        //Initialize the String builder object
+        build = new StringBuilder();
+
+        //Build the initial DNA sequence for the given length
+        for(int i = 0; i < seqLength; i++){
+            //Get the next character and append to current sequence
+            String validChar = nextValidChar();
+
+            //Check if we're at the end of the file. Return null if we are
+            if(validChar != null){
+                build.append(validChar);
+            }else{
+                throw new GeneBankFileException("Error: No valid sequences of length " + length);
+            }
+        }
+        
     }
 
     /**
@@ -45,31 +63,46 @@ public class GeneBankFileReader {
      * @return DNASequence The next sequence in the given file, null if no more sequences
      */
     public DNASequence getNextSequence(){
-        StringBuilder build = new StringBuilder();
-        //SubScan is made so we don't lose our place in the file by calling next on our file scanner. 
-        Scanner subScan;
-        String next;
+        String retSeq = build.toString();
 
-        //Create a string of the DNA sequence of length seqLength
-        for(int i = 0; i < seqLength; i++){
-            subScan = scan;
-            next = subScan.next();
+        //Delete the first character of the current sequence
+        build.deleteCharAt(0);
+        
+        //Get the next character and append to current sequence
+        String validChar = nextValidChar();
 
+        //Check if we're at the end of the file. Return null if we are
+        if(validChar != null){
+            build.append(validChar);
+        }else{
+            return null;
+        }
+
+        return(new DNASequence(retSeq.toUpperCase()));
+    }
+
+    /**
+     * Gets the next valid character from the GeneBank file
+     * 
+     * @return String The next valid character as a string
+     */
+    public String nextValidChar(){
+        String nextChar = scan.next();
+        
+        //Check if the scanner has reached the end of the readable DNA sequence
+        if(nextChar.equals("/")){
+            return null;
+        }
+
+        //If the next character is not a DNA base then try adding the next character
+        while(!nextChar.equals("a") && !nextChar.equals("c") && !nextChar.equals("t") && !nextChar.equals("g")){
+            nextChar = scan.next();
             //Check if the scanner has reached the end of the readable DNA sequence
-            if(next.equals("/")){
+            if(nextChar.equals("/")){
                 return null;
             }
-
-            //If the next character is not a DNA base then decrement i and try adding the next character
-            if(!next.equals("a") && !next.equals("c") && !next.equals("t") && !next.equals("g")){
-                i--;
-                continue;
-            }
-
-            build.append(next);
         }
-        scan.next();
-        return(new DNASequence(build.toString().toUpperCase()));
+        return nextChar;
     }
 
     /**

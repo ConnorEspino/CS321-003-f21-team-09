@@ -21,8 +21,17 @@ public class DNASequence {
         for (int i = 0; i < sequence.length(); i++) {
             list = list << 2;
             switch (sequence.charAt(i)) {
+                case 1:
+                    sequenceString = sequence;
+                    list = Long.parseLong(sequence);
+                    return;
+                case 0:
+                    sequenceString = sequence;
+                    list = Long.parseLong(sequence);
+                    return;
                 case 'A':
                     list |= (DNA.A);
+
                 break;
                 case 'T':
                     list |= (DNA.T);
@@ -53,28 +62,6 @@ public class DNASequence {
      * @return String - The current DNA sequence in String form.
      */
     public String toString() {
-        if(sequenceString == "") {
-            String listString = String.valueOf(list);
-            
-            for (int i = 0; i < listString.length(); i++) {
-                switch (listString.substring(i, i+1)) {
-                    case "00":
-                        sequenceString = sequenceString + 'A';
-                    break;
-                    case "11":
-                        sequenceString = sequenceString + 'T';
-                    break;
-                    case "01":
-                        sequenceString = sequenceString + 'C';
-                    break;
-                    case "10":
-                        sequenceString = sequenceString + 'G';
-                    break;
-                }
-                i++;
-            }
-        }
-
         return sequenceString;
     }
 
