@@ -16,9 +16,11 @@ public class GeneBankCreateBTree {
         String FileName = args[2];
         GeneBankFileReader reader = new GeneBankFileReader(FileName, 0);
         TreeObject sequence = null;
-        while(reader.hasNextSequence()) {
-            sequence = new TreeObject(reader.getNextSequence());
+        DNASequence insert = reader.getNextSequence();
+        while(insert != null) {
+            sequence = new TreeObject(insert);
             createdBTree.BTreeInsert(sequence);
+            insert = reader.getNextSequence();
         }
     }
 
