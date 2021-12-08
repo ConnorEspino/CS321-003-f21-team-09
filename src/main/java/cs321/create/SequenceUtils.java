@@ -1,20 +1,74 @@
 package cs321.create;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Extract DNA Sequences and Generate DNA Subsequences
+ * Utility methods dealing with DNA sequences and its compact representation as long variables.
  */
-public class SequenceUtils
-{
-    private static final String MARKER_START_DNA_SEQUENCE = "ORIGIN";
+public class SequenceUtils{
 
-    public static List<String> getDNASequencesFromGBKGenomeFile(String gbkGenomeFileName) throws Exception
-    {
-        return new ArrayList<>();
+    /**
+     * Converts a DNA string to a long of pairs of binary values
+     * @param DNAString The string to convert to binary
+     * @return long The binary representation of the given DNA sequence
+     */
+    public static long DNAStringToLong(String DNAString)  {
+        long dnaLong = 0;
+        for (int i = 0; i < DNAString.length(); i++) {
+            dnaLong = dnaLong << 2;
+            switch (DNAString.charAt(i)) {
+                case 'A':
+                    dnaLong |= (DNA.A);
+                    break;
+                case 'T':
+                    dnaLong |= (DNA.T);
+                    break;
+                case 'C':
+                    dnaLong |= (DNA.C);
+                    break;
+                case 'G':
+                    dnaLong |= (DNA.G);
+                    break;
+            }
+        }
+
+        return dnaLong;
+    }
+
+    /**
+     * Converts a binary long to a string of DNA bases.
+     * @param sequence The long sequence to convert to a string
+     * @param seqLength The length of the binary values stored in the long
+     * @return String The string representation of the given long sequence
+     */
+    public String longToDNAString(long sequence, int seqLength) {
+        String dnaString = "";
+        for(int i = 0; i < seqLength/2; i++){ 
+            int temp = (int) (sequence & (11 << 2 * i));
+            switch(temp){
+                case DNA.A:
+                    dnaString += "A";
+                    break;
+                case DNA.T:
+                    dnaString += "T";
+                    break;
+                case DNA.C:
+                    dnaString += "C";
+                    break;
+                case DNA.G:
+                    dnaString += "G";
+                    break;
+            }
+        }
+        return dnaString;
+    }
+
+
+    /**
+     * Returns the complement of the given long sequence
+     * @param sequence The DNA sequence as a binary long
+     * @return long The complement of the given DNA long sequence
+     */
+    public static long getComplement(long sequence) {//, int seqLength piazza code included this, but it is unused
+        return ~sequence;
     }
 
 }
