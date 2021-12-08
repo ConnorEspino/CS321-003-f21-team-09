@@ -105,4 +105,13 @@ public class BTree{
         return size;
     }
 
+    /**
+     * Returns the address offset, calculated by finding the max used space of a node on the disk
+     * @return long Address offset
+     */
+    public long getOffset(){
+        //Return the max size used by a node with degree
+        return (33 + (2*degree - 1)*(96) + (2*degree) * (64));
+    }
+
 }
