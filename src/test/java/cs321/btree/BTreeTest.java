@@ -20,7 +20,7 @@ public class BTreeTest
     public void btreeDegree4Test() throws IOException, BTreeException {
         //TODO instantiate and populate a bTree object
         RandomAccessFile file = new RandomAccessFile("src/test/java/cs321/btree/test", "rw");
-        BTree bTree = new BTree(2, file, 2);
+        BTree bTree = new BTree(2, file);
         int expectedNumberOfNodes = 3;
 
         TreeObject insert = new TreeObject(new DNASequence("T"));
