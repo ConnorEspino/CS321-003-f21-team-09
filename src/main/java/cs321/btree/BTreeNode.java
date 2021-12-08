@@ -43,23 +43,6 @@ public class BTreeNode {
     }
 
     /**
-     * Constructor for BTreeNode without adress intially set to a value
-     * @param degree The degree of the BTree that the node is in 
-     * @param file  The file to read and write the node to
-     * 
-     */
-    public BTreeNode(int degree, RandomAccessFile file){
-        size = 0;
-        leaf = true;
-        this.degree = degree;
-        this.file = file;
-        maxChildIndex = 0;
-        // Initialize array with a size of 2t-1
-        array = new TreeObject[(2 * degree) - 1];
-        children = new long[2*degree];
-    }
-
-    /**
      * Writes the node information to the address of the BTreeNodein the binary data file
      * @param cache The cache to add the node to when writing
      * @throws IOException
@@ -72,36 +55,9 @@ public class BTreeNode {
             file.writeInt(array[i].getFrequency());
         }
         if(leaf){
-            file.writeInt(1);
+            file.writeByte(1);
         }else{
-            file.writeInt(0);
-            for(int i = 0; i < maxChildIndex; i++){
-                file.writeLong(children[i]);
-            }
-        }
-        //Add this node object to the cache
-        if(cache != null){
-            cache.addObject(this);
-        }
-    }
-
-    /**
-     * Writes the node information to the address of the BTreeNodein the binary data file
-     * @param cache The cache to add the node to when writing
-     * @param address The address to write the BTreeNode object to in the file
-     * @throws IOException
-     */
-    public void diskWrite(LinkedListCache cache, long address) throws IOException{
-        file.seek(address);
-        file.writeInt(size);
-        for(int i = 0; i < size; i++){
-            file.writeLong(array[i].getKey());
-            file.writeInt(array[i].getFrequency());
-        }
-        if(leaf){
-            file.writeInt(1);
-        }else{
-            file.writeInt(0);
+            file.writeByte(0);
             for(int i = 0; i < maxChildIndex; i++){
                 file.writeLong(children[i]);
             }
@@ -293,38 +249,36 @@ public class BTreeNode {
         return (address == obj.getAddress());
     }
 
-    public BTreeNode BTreeSplitChild(BTreeNode TreeNode, int index) throws BTreeException, IOException {
+    public BTreeNode BTreeSplitChild(int index) throws BTreeException, IOException {
         if(index < 0 || index >= (2*degree-1)){
             throw new IndexOutOfBoundsException("Invalid index");
         }
-
-        BTreeNode y = TreeNode;
-        BTreeNode z = y;
+        BTreeNode z = new BTreeNode(degree, file, address);
+        BTreeNode y = this.diskRead(children[index], null);
         z.leaf = y.leaf;
         z.size = degree - 1;
-        for (int j = 0; j <= degree/2 ; j++) {
-            z.array[j] = y.array[(j + degree)-1];
+        for (int j = 0; j < degree - 1; j++) {
+            z.array[j] = y.array[(j + degree)];
         }
         if (!y.isLeaf()) {
             for (int j = 0; j < degree; j++) {
-                z.children[j] = y.children[(j + degree)-1];
+                z.children[j] = y.children[(j + degree)];
             }
         }
         y.size = degree -1;
-        for (int j = (TreeNode.getNumElements())-2; j > index; j--) {
-            TreeNode.children[j+1] = TreeNode.children[j];
+        for (int j = (this.getNumElements()); j >= index+1; j--) {
+            this.children[j+1] = this.children[j];
         }
-        TreeNode.setChildAddress(index, z.address);
-//        TreeNode.children[index+1] = z.array[degree-1].getKey();
-        for (int t = TreeNode.getNumElements()-2; t > index-1; t--) {
-            TreeNode.array[t+1] = TreeNode.array[t];
+        this.children[index+1] = z.address;
+        for (int t = this.getNumElements()-1; t >= index; t--) {
+            this.array[t+1] = this.array[t];
         }
-        TreeNode.array[index] = y.array[degree];
-        TreeNode.size++;
-//        y.diskWrite(null);
-//        z.diskWrite(null);
-//        TreeNode.diskWrite(null);
-        return z;
+        this.array[index] = y.array[degree];
+        this.size++;
+        y.diskWrite(null);
+        z.diskWrite(null);
+        this.diskWrite(null);
+        return this;
     }
 
     public String toString(){
