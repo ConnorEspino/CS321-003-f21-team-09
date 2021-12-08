@@ -88,32 +88,6 @@ public class BTreeNode {
     /**
      * Writes the node information to the address of the BTreeNodein the binary data file
      * @param cache The cache to add the node to when writing
-     * @throws IOException
-     */
-    public void diskWrite(LinkedListCache cache) throws IOException{
-        file.seek(address);
-        file.writeInt(size);
-        for(int i = 0; i < size; i++){
-            file.writeLong(array[i].getKey());
-            file.writeInt(array[i].getFrequency());
-        }
-        if(leaf){
-            file.writeInt(1);
-        }else{
-            file.writeInt(0);
-            for(int i = 0; i < maxChildIndex; i++){
-                file.writeLong(children[i]);
-            }
-        }
-        //Add this node object to the cache
-        if(cache != null){
-            cache.addObject(this);
-        }
-    }
-
-    /**
-     * Writes the node information to the address of the BTreeNodein the binary data file
-     * @param cache The cache to add the node to when writing
      * @param address The address to write the BTreeNode object to in the file
      * @throws IOException
      */
