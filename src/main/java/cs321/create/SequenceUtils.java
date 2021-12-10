@@ -40,25 +40,25 @@ public class SequenceUtils{
      * @return String The string representation of the given long sequence
      */
     public static String longToDNAString(long sequence, int seqLength) {
-        String dnaString = "";
-        for(int i = 0; i < seqLength/2; i++){ 
-            int temp = (int) (sequence & (11 << 2 * i));
+        StringBuilder dnaString = new StringBuilder();
+        for(int i = 0; i < seqLength; i++){ 
+            int temp = (int) ((sequence & (0b11 << 2 * i)) >> 2 * i);
             switch(temp){
                 case DNA.A:
-                    dnaString += "A";
+                    dnaString.append("A");
                     break;
                 case DNA.T:
-                    dnaString += "T";
+                    dnaString.append("T");
                     break;
                 case DNA.C:
-                    dnaString += "C";
+                    dnaString.append("C");
                     break;
                 case DNA.G:
-                    dnaString += "G";
+                    dnaString.append("G");
                     break;
             }
         }
-        return dnaString;
+        return dnaString.reverse().toString();
     }
 
 
