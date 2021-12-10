@@ -39,7 +39,7 @@ public class SequenceUtils{
      * @param seqLength The length of the binary values stored in the long
      * @return String The string representation of the given long sequence
      */
-    public String longToDNAString(long sequence, int seqLength) {
+    public static String longToDNAString(long sequence, int seqLength) {
         String dnaString = "";
         for(int i = 0; i < seqLength/2; i++){ 
             int temp = (int) (sequence & (11 << 2 * i));
@@ -71,11 +71,13 @@ public class SequenceUtils{
     public static long getComplement(long sequence, int seqLength) {
         long retSeq = ~sequence;
         long andSeq = 0;
+
+        //Create a binary sequence "mask" to only get the number of bits specified by the seqLength
         for(int i = 0; i < seqLength; i++){
             andSeq = andSeq << 1;
             andSeq++;
         }
+
         return retSeq & andSeq;
     }
-
 }
