@@ -51,22 +51,22 @@ public class BTree{
         BTree[0] = newRoot;
     }
 
-
-    //good?
-    public TreeObject BTreeSearch(BTreeNode TreeNode, TreeObject Key) throws BTreeException, IOException {
-        int i = 1;
-        while((i <= TreeNode.getNumElements()) && Key.getKey() > TreeNode.getElement(i).getKey()){
-            i++;
-        }
-        if (i < TreeNode.getNumElements() && 0 == (Key.compareTo(TreeNode.getElement(i)))) {
-            return (TreeNode.getElement(i));
-        } else if(TreeNode.isLeaf()){
-            return null;
-        } else {
-            BTreeNode nodeReturn = TreeNode.diskRead(TreeNode.getChildAddress(i), null);
-            return BTreeSearch(nodeReturn, Key);
-        }
-    }
+//
+//    //good?
+//    public TreeObject BTreeSearch(BTreeNode TreeNode, TreeObject Key) throws BTreeException, IOException {
+//        int i = 1;
+//        while((i <= TreeNode.getNumElements()) && Key.getKey() > TreeNode.getElement(i).getKey()){
+//            i++;
+//        }
+//        if (i < TreeNode.getNumElements() && 0 == (Key.compareTo(TreeNode.getElement(i)))) {
+//            return (TreeNode.getElement(i));
+//        } else if(TreeNode.isLeaf()){
+//            return null;
+//        } else {
+//            BTreeNode nodeReturn = TreeNode.diskRead(TreeNode.getChildAddress(i), null);
+//            return BTreeSearch(nodeReturn, Key);
+//        }
+//    }
 
     public void BTreeInsert(TreeObject Key) throws BTreeException, IOException {
         BTreeNode r = root();
