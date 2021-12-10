@@ -12,6 +12,7 @@ public class BTree{
     private int degree;
     private RandomAccessFile file;
     private long address;
+    public int seqLength;
 
     public BTree(int degree, RandomAccessFile file, long address) throws IOException {
         BTree = new BTreeNode[4096];
@@ -22,6 +23,7 @@ public class BTree{
         BTreeNode x = new BTreeNode(degree, file, address);
         x.diskWrite(null);
         setRoot(x);
+        seqLength = 1;
     }
 
     public BTreeNode root() {
@@ -89,10 +91,14 @@ public class BTree{
                 }
             }
         }
-//        retVal = BFS.get(indexNode);
-//        retVal = nodesChecked.get(indexNode);
         retVal = thisNode.diskRead(nodesChecked.get(indexNode).getAddress(), null);
         return retVal;
+    }
+
+    public void inOrderTraversalPrint() throws IOException, BTreeException {
+        BTreeNode root = root();
+        root.diskWrite(null);
+        root.inOrderTraversal(root);
     }
 
     public int getNumberOfNodes() {
