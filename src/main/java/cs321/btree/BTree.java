@@ -15,7 +15,7 @@ public class BTree{
     private int degree;
     private RandomAccessFile file;
     private long address;
-    private int subSeqLength;
+    private int seqLength;
     private boolean useCache;
     private int deBugLevel;
     private int cacheSize;
@@ -29,11 +29,12 @@ public class BTree{
         BTreeNode x = new BTreeNode(degree, file, address);
         x.diskWrite(null);
         setRoot(x);
+        seqLength = 1;
     }
 
     public BTree(GeneBankCreateBTreeArguments geneBankCreateBTreeArguments) throws FileNotFoundException {
         degree = geneBankCreateBTreeArguments.degree;
-        subSeqLength = geneBankCreateBTreeArguments.subsequenceLength;
+        seqLength = geneBankCreateBTreeArguments.subsequenceLength;
         deBugLevel = geneBankCreateBTreeArguments.debugLevel;
         cacheSize = geneBankCreateBTreeArguments.cacheSize;
         useCache = geneBankCreateBTreeArguments.useCache;
@@ -83,6 +84,7 @@ public class BTree{
                 size++;
             }
             r.insertNonFull(Key);
+            r.diskWrite(null);
         }
     }
 
@@ -96,20 +98,24 @@ public class BTree{
         address += getOffset();
         BTreeNode thisNode = new BTreeNode(degree, file, address);
         while(nodesChecked.size() <= indexNode){
-            thisNode = thisNode.diskRead(BFS.removeFirst().getAddress(), null);
+            thisNode = thisNode.diskRead(BFS.removeFirst().getAddress(), null, seqLength);
 //            thisNode = BFS.removeFirst();
             if(!thisNode.isLeaf()){
                 for(int i = 0; i < thisNode.getNumChildren(); i++){
-                    BTreeNode tempNode = thisNode.diskRead(thisNode.getChildAddress(i), null);
+                    BTreeNode tempNode = thisNode.diskRead(thisNode.getChildAddress(i), null, seqLength);
                     BFS.add(tempNode);
                     nodesChecked.add(tempNode);
                 }
             }
         }
-//        retVal = BFS.get(indexNode);
-//        retVal = nodesChecked.get(indexNode);
-        retVal = thisNode.diskRead(nodesChecked.get(indexNode).getAddress(), null);
+        retVal = thisNode.diskRead(nodesChecked.get(indexNode).getAddress(), null, seqLength);
         return retVal;
+    }
+
+    public void inOrderTraversalPrint() throws IOException, BTreeException {
+        BTreeNode root = root();
+        root.diskWrite(null);
+        root.inOrderTraversal(root);
     }
 
     public int getNumberOfNodes() {

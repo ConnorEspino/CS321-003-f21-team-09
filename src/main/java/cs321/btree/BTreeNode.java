@@ -23,7 +23,8 @@ public class BTreeNode {
     private RandomAccessFile file;
     //Address of the BTreeNode
     private long address;
-
+    //Length of the DNASequence string
+    private int seqLength;
 
     /**
      * Constructor for BTreeNode
@@ -126,6 +127,9 @@ public class BTreeNode {
         if (array[array.length - 1] != null) {
             throw new BTreeException("Node is full, split before adding more elements");
         }
+
+        seqLength = obj.getSequenceLength();
+
         // Empty list insertion
         if (size == 0) {
             array[0] = obj;
@@ -255,7 +259,7 @@ public class BTreeNode {
             throw new IndexOutOfBoundsException("Invalid index");
         }
         BTreeNode z = new BTreeNode(degree, file, address);
-        BTreeNode y = this.diskRead(children[index], null);
+        BTreeNode y = this.diskRead(children[index], null, seqLength);
         z.leaf = y.leaf;
         z.size = degree - 1;
         for (int j = 0; j < degree - 1; j++) {
@@ -291,6 +295,24 @@ public class BTreeNode {
             retStr += array[i].toString();
         }
         return retStr;
+    }
+
+    public void inOrderTraversal(BTreeNode newNode) throws BTreeException, IOException {
+        //Search starting at the end of the node.
+        for (int i = 0; i < newNode.getNumElements(); i++) {
+            for(int j = 0; j < newNode.getNumChildren(); j++){
+                BTreeNode child = newNode.diskRead(newNode.getChildAddress(j), null, seqLength);
+                if (child != null){
+                    inOrderTraversal(child);
+
+                }
+            }
+//            newNode.dump();
+            BTreeNode child = newNode.diskRead(newNode.getChildAddress(i), null, seqLength);
+            child.toString();
+//            child.dump();
+//            inOrderTraversal(child);
+        }
     }
 
 }

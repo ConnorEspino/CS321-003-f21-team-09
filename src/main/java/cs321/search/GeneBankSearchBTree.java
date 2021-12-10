@@ -14,6 +14,8 @@ public class GeneBankSearchBTree {
     //Change when you know metadata size
     private static int METADATA_SIZE = 8;
     private static LinkedListCache cache;
+    //TODO Change when readMetaData method is implemented
+    private static int seqLength = 5;
 
 
     /**
@@ -34,7 +36,7 @@ public class GeneBankSearchBTree {
             }
             //If the thing we're searching for is greater than the current element, check right child.
             if(query > x.getElement(i).getKey() && !x.isLeaf()){
-                BTreeNode child = x.diskRead(x.getChildAddress(i+1), cache);
+                BTreeNode child = x.diskRead(x.getChildAddress(i+1), cache, seqLength);
                 find(child, query);
             }else{
                 return (Integer) null;
@@ -49,13 +51,14 @@ public class GeneBankSearchBTree {
         Scanner queryScan = new Scanner(arguments.getQueryFile());
 
         RandomAccessFile treeFile = arguments.getTreeFile();
+
         treeFile.seek(METADATA_SIZE);
         
         if(arguments.useCache()){
             cache = new LinkedListCache(arguments.getCacheSize());
         }
         BTreeNode dummyNode = new BTreeNode(0, treeFile, 0);
-        BTreeNode x = dummyNode.diskRead(METADATA_SIZE, cache);
+        BTreeNode x = dummyNode.diskRead(METADATA_SIZE, cache, seqLength);
 
         //Search file for frequency of each query in the query file
         while(queryScan.hasNextLine()){
