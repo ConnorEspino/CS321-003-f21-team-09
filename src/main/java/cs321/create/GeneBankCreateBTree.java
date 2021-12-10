@@ -22,6 +22,7 @@ public class GeneBankCreateBTree {
             createdBTree.BTreeInsert(sequence);
             insert = reader.getNextSequence();
         }
+
     }
 
     private static GeneBankCreateBTreeArguments parseArgumentsAndHandleExceptions(String[] args) {
@@ -36,15 +37,16 @@ public class GeneBankCreateBTree {
     }
 
     private static void printUsageAndExit(String errorMessage) {
-        System.out.println(errorMessage+ "USAGE: <0/1(no/with Cache)> <degree> <gbk_file> <subsequence_length> [<cache_size>] [<debug_level>]");
+        System.out.println(errorMessage + "USAGE: <0/1(no/with Cache)> <degree> <gbk_file> <subsequence_length> [<cache_size>] [<debug_level>]");
         System.exit(1);
     }
 
     public static GeneBankCreateBTreeArguments parseArguments(String[] args) throws ParseArgumentException {
+        boolean useCache = false;
         if(args[0].equals("1")){
-            boolean useCache = true;
+            useCache = true;
         } else if (args[0].equals("0")){
-            boolean useCache = false;
+            useCache = false;
         } else {
             printUsageAndExit("Use 0 for no Cache, 1 for use Cache\n");
         }
