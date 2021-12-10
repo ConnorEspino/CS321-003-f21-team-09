@@ -1,5 +1,8 @@
 package cs321.btree;
 
+import cs321.create.GeneBankCreateBTreeArguments;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.LinkedList;
@@ -12,6 +15,10 @@ public class BTree{
     private int degree;
     private RandomAccessFile file;
     private long address;
+    private int subSeqLength;
+    private boolean useCache;
+    private int deBugLevel;
+    private int cacheSize;
 
     public BTree(int degree, RandomAccessFile file, long address) throws IOException {
         BTree = new BTreeNode[4096];
@@ -22,6 +29,17 @@ public class BTree{
         BTreeNode x = new BTreeNode(degree, file, address);
         x.diskWrite(null);
         setRoot(x);
+    }
+
+    public BTree(GeneBankCreateBTreeArguments geneBankCreateBTreeArguments) throws FileNotFoundException {
+        degree = geneBankCreateBTreeArguments.degree;
+        subSeqLength = geneBankCreateBTreeArguments.subsequenceLength;
+        deBugLevel = geneBankCreateBTreeArguments.debugLevel;
+        cacheSize = geneBankCreateBTreeArguments.cacheSize;
+        useCache = geneBankCreateBTreeArguments.useCache;
+        String fileName = geneBankCreateBTreeArguments.gbkFileName;
+        RandomAccessFile file1 = new RandomAccessFile(fileName, "rw");
+        file = file1;
     }
 
     public BTreeNode root() {
