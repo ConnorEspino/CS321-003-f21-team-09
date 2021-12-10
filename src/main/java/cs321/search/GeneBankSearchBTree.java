@@ -1,8 +1,10 @@
 package cs321.search;
 
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Scanner;
 
+import cs321.btree.BTreeException;
 import cs321.btree.BTreeNode;
 import cs321.create.DNASequence;
 
@@ -20,8 +22,10 @@ public class GeneBankSearchBTree {
      * @param query The DNA Sequence we are searching for, represented in binary
      * @param x     The root node to start searching from
      * @return int How many occurances of subsequence query exist in BTree
+     * @throws BTreeException
+     * @throws IOException
      */
-    public static int find(BTreeNode x, long query) {
+    public static int find(BTreeNode x, long query) throws IOException, BTreeException {
         //Search starting at the end of the node.
         for(int i = (2*arguments.getDegree()) -1; i > 0; i--){
             //If we find a match, return the frequency of that sequence
@@ -30,7 +34,7 @@ public class GeneBankSearchBTree {
             }
             //If the thing we're searching for is greater than the current element, check right child.
             if(query > x.getElement(i).getKey() && !x.isLeaf()){
-                BTreeNode child = new BTreeNode(arguments.getDegree(), arguments.getTreeFile(), x.getChildAddress(i+1));
+                BTreeNode child = x.diskRead(x.getChildAddress(i+1), cache);
                 find(child, query);
             }else{
                 return (Integer) null;
