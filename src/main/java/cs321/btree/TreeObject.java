@@ -8,7 +8,7 @@ import cs321.create.DNASequence;
  * @author Connor Espino
  */
 public class TreeObject implements Comparable<TreeObject>{
-    private long key;
+    private DNASequence seq;
     private int frequency;
 
     /**
@@ -17,8 +17,8 @@ public class TreeObject implements Comparable<TreeObject>{
      * @param seq The DNASequence to store in the tree object
      */
     public TreeObject(DNASequence seq) {
-        // Store the DNASequence as a binary long
-        key = seq.getLong();
+        // Store the DNASequence
+        this.seq = seq;
         frequency = 0;
     }
 
@@ -31,7 +31,7 @@ public class TreeObject implements Comparable<TreeObject>{
      */
     public TreeObject(DNASequence seq, int freq) {
         // Store the DNASequence as a binary long
-        key = seq.getLong();
+        this.seq = seq;
         frequency = freq;
     }
 
@@ -42,7 +42,7 @@ public class TreeObject implements Comparable<TreeObject>{
      * @return long The binary representation of the DNASequence
      */
     public long getKey() {
-        return key;
+        return seq.getLong();
     }
 
     /**
@@ -54,11 +54,11 @@ public class TreeObject implements Comparable<TreeObject>{
      *         object
      */
     public int compareTo(TreeObject obj) {
-        if (key == obj.getKey())
+        if (seq.getLong() == obj.getKey())
             return 0;
-        else if (key < obj.getKey())
+        else if (seq.getLong() < obj.getKey())
             return -1;
-        else if (key > obj.getKey())
+        else if (seq.getLong() > obj.getKey())
             return 1;
         else
             return 0;
@@ -71,7 +71,7 @@ public class TreeObject implements Comparable<TreeObject>{
      * @return boolean True if the objects are equal, false otherwise
      */
     public boolean equals(TreeObject obj){
-        return key == obj.getKey();
+        return seq.getLong() == obj.getKey();
     }
 
     /**
@@ -93,7 +93,7 @@ public class TreeObject implements Comparable<TreeObject>{
 
     public String toString(){
         String sequenceString = "";
-        String listString = Long.toBinaryString(key);
+        String listString = Long.toBinaryString(seq.getLong());
         
         for (int i = 0; i < listString.length(); i++) {
             if(listString.equals("0")){

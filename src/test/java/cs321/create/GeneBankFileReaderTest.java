@@ -51,16 +51,39 @@ public class GeneBankFileReaderTest
 
     @Test
     public void ValidSequence_EndOfFile_ReturnNull() throws FileNotFoundException, GeneBankFileException{
-        reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFileShort.txt", 200);
+        reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFileShort.txt", 10);
+        for(int i = 0; i < 50; i++){
+            reader.getNextSequence();
+            
+        }
         assertEquals(null, reader.getNextSequence());
+    }
+
+    @Test
+    public void largeSeqLen_constructor_GeneBankFileException() throws FileNotFoundException{
+        try {
+            reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFileShort.txt", 200);
+            assert(false);
+        } catch (GeneBankFileException e) {
+        }
+        
     }
 
     @Test
     public void ValidSequence_getNextSequence_ReturnDNASequence() throws FileNotFoundException, GeneBankFileException{
         reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFile.txt", 10);
         DNASequence seq = new DNASequence("GATCCTCCAT");
-        assert(seq.equals(reader.getNextSequence()));
+        assert(seq.equals(reader.getNextSequence()) == 0);
     }
+
+    @Test
+    public void twoSequences_getNextSequence2_properSequences() throws FileNotFoundException, GeneBankFileException{
+        reader = new GeneBankFileReader("src/test/java/cs321/create/ValidTestFile.txt", 3);
+        DNASequence seq = new DNASequence("GAT");
+        DNASequence seq2 = new DNASequence("ATC");
+        assert(seq.equals(reader.getNextSequence()) == 0 && seq2.equals(reader.getNextSequence()) == 0);
+    }
+
 
     //Tests for getSequenceLength method below
     @Test

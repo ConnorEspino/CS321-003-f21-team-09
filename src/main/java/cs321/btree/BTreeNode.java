@@ -101,7 +101,7 @@ public class BTreeNode {
         for(int i = 0; i < n; i++){
             long value = file.readLong();
             int freq = file.readInt();
-            TreeObject obj = new TreeObject(new DNASequence(value), freq);
+            TreeObject obj = new TreeObject(new DNASequence(Long.toBinaryString(value)), freq);
             x.array[i] = obj;
         }
 
