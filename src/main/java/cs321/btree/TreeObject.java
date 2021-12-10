@@ -92,6 +92,22 @@ public class TreeObject implements Comparable<TreeObject>{
     }
 
     public String toString(){
-        return seq.toString();
+        String sequenceString = "";
+        String listString = Long.toBinaryString(seq.getLong());
+        
+        for (int i = 0; i < listString.length(); i++) {
+            if(listString.equals("0")){
+                sequenceString = sequenceString + 'A';
+            }else if(listString.equals("11")){
+                sequenceString = sequenceString + 'T';
+            }else if(listString.equals("1")){
+                sequenceString = sequenceString + 'C';
+            }else if(listString.equals("10")){
+                sequenceString = sequenceString + 'G';
+            }
+            i++;
+        }
+
+        return sequenceString;
     }
 }

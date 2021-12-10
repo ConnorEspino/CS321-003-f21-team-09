@@ -27,6 +27,8 @@ public class BTreeNode {
     /**
      * Constructor for BTreeNode
      * @param degree The degree of the BTree that the node is in 
+     * @param file  The file to read and write the node to
+     * @param address The address in the File to read and write the node to
      */
     public BTreeNode(int degree, RandomAccessFile file, long address) {
         size = 0;
@@ -42,6 +44,7 @@ public class BTreeNode {
 
     /**
      * Writes the node information to the address of the BTreeNodein the binary data file
+     * @param cache The cache to add the node to when writing
      * @throws IOException
      */
     public void diskWrite(LinkedListCache cache) throws IOException{
@@ -52,9 +55,9 @@ public class BTreeNode {
             file.writeInt(array[i].getFrequency());
         }
         if(leaf){
-            file.writeInt(1);
+            file.writeByte(1);
         }else{
-            file.writeInt(0);
+            file.writeByte(0);
             for(int i = 0; i < maxChildIndex; i++){
                 file.writeLong(children[i]);
             }
@@ -122,7 +125,6 @@ public class BTreeNode {
         if (array[array.length - 1] != null) {
             throw new BTreeException("Node is full, split before adding more elements");
         }
-
         // Empty list insertion
         if (size == 0) {
             array[0] = obj;
@@ -157,7 +159,6 @@ public class BTreeNode {
                     size++;
                     break;
                 }
-
                 // If the whole array has been iterated through and no placement was found,
                 // insert at the beginning of the array
                 if (i == 0) {
@@ -248,33 +249,36 @@ public class BTreeNode {
         return (address == obj.getAddress());
     }
 
-    public BTreeNode BTreeSplitChild(BTreeNode TreeNode, int index) throws BTreeException, IOException {
+    public BTreeNode BTreeSplitChild(int index) throws BTreeException, IOException {
+        if(index < 0 || index >= (2*degree-1)){
+            throw new IndexOutOfBoundsException("Invalid index");
+        }
         BTreeNode z = new BTreeNode(degree, file, address);
-        BTreeNode y = new BTreeNode(degree, file, TreeNode.getChildAddress(index));
+        BTreeNode y = this.diskRead(children[index], null);
         z.leaf = y.leaf;
         z.size = degree - 1;
         for (int j = 0; j < degree - 1; j++) {
-            z.array[j] = y.array[j + degree];
+            z.array[j] = y.array[(j + degree)];
         }
         if (!y.isLeaf()) {
             for (int j = 0; j < degree; j++) {
-                z.children[j] = y.children[j + degree];
+                z.children[j] = y.children[(j + degree)];
             }
         }
-        y.size = degree - 1;
-        for (int j = TreeNode.getNumElements(); j > index + 1; j--) {
-            TreeNode.children[degree + j] = TreeNode.children[degree];
+        y.size = degree -1;
+        for (int j = (this.getNumElements()); j >= index+1; j--) {
+            this.children[j+1] = this.children[j];
         }
-        TreeNode.setChildAddress(index, z.address);
-        for (int j = TreeNode.getNumElements(); j > index; j--) {
-            TreeNode.array[degree + j] = TreeNode.array[degree];
+        this.children[index+1] = z.address;
+        for (int t = this.getNumElements()-1; t >= index; t--) {
+            this.array[t+1] = this.array[t];
         }
-        TreeNode.array[index] = y.array[degree];
-        TreeNode.size++;
+        this.array[index] = y.array[degree];
+        this.size++;
         y.diskWrite(null);
         z.diskWrite(null);
-        TreeNode.diskWrite(null);
-        return z;
+        this.diskWrite(null);
+        return this;
     }
 
     public String toString(){
