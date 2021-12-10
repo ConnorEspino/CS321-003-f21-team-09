@@ -293,4 +293,22 @@ public class BTreeNode {
         return retStr;
     }
 
+    public void inOrderTraversal(BTreeNode newNode) throws BTreeException, IOException {
+        //Search starting at the end of the node.
+        for (int i = 0; i < newNode.getNumElements(); i++) {
+            for(int j = 0; j < newNode.getNumChildren(); j++){
+                BTreeNode child = newNode.diskRead(newNode.getChildAddress(j), null, seqLength);
+                if (child != null){
+                    inOrderTraversal(child);
+
+                }
+            }
+//            newNode.dump();
+            BTreeNode child = newNode.diskRead(newNode.getChildAddress(i), null, seqLength);
+            child.toString();
+//            child.dump();
+//            inOrderTraversal(child);
+        }
+    }
+
 }
