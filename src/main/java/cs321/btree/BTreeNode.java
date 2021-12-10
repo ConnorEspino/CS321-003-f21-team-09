@@ -22,6 +22,8 @@ public class BTreeNode {
     //Address of the BTreeNode
     private long address;
     LinkedListCache cache;
+    //index for inOrderTraversal
+    private int i = -1;
 
 
     /**
@@ -292,4 +294,21 @@ public class BTreeNode {
         return retStr;
     }
 
+    public void inOrderTraversal(BTreeNode newNode) throws BTreeException, IOException {
+        //Search starting at the end of the node.
+        for (int i = 0; i < newNode.getNumElements(); i++) {
+            for(int j = 0; j < newNode.getNumChildren(); j++){
+                BTreeNode child = newNode.diskRead(newNode.getChildAddress(j), null);
+                if (child != null){
+                    inOrderTraversal(child);
+
+                }
+            }
+//            newNode.dump();
+            BTreeNode child = newNode.diskRead(newNode.getChildAddress(i), null);
+            child.toString();
+//            child.dump();
+//            inOrderTraversal(child);
+        }
+    }
 }
