@@ -15,7 +15,7 @@ public class BTree{
     private int degree;
     private RandomAccessFile file;
     private long address;
-    private int subSeqLength;
+    private int seqLength;
     private boolean useCache;
     private int deBugLevel;
     private int cacheSize;
@@ -34,7 +34,7 @@ public class BTree{
 
     public BTree(GeneBankCreateBTreeArguments geneBankCreateBTreeArguments) throws FileNotFoundException {
         degree = geneBankCreateBTreeArguments.degree;
-        subSeqLength = geneBankCreateBTreeArguments.subsequenceLength;
+        seqLength = geneBankCreateBTreeArguments.subsequenceLength;
         deBugLevel = geneBankCreateBTreeArguments.debugLevel;
         cacheSize = geneBankCreateBTreeArguments.cacheSize;
         useCache = geneBankCreateBTreeArguments.useCache;
@@ -98,17 +98,17 @@ public class BTree{
         address += getOffset();
         BTreeNode thisNode = new BTreeNode(degree, file, address);
         while(nodesChecked.size() <= indexNode){
-            thisNode = thisNode.diskRead(BFS.removeFirst().getAddress(), null);
+            thisNode = thisNode.diskRead(BFS.removeFirst().getAddress(), null, seqLength);
 //            thisNode = BFS.removeFirst();
             if(!thisNode.isLeaf()){
                 for(int i = 0; i < thisNode.getNumChildren(); i++){
-                    BTreeNode tempNode = thisNode.diskRead(thisNode.getChildAddress(i), null);
+                    BTreeNode tempNode = thisNode.diskRead(thisNode.getChildAddress(i), null, seqLength);
                     BFS.add(tempNode);
                     nodesChecked.add(tempNode);
                 }
             }
         }
-        retVal = thisNode.diskRead(nodesChecked.get(indexNode).getAddress(), null);
+        retVal = thisNode.diskRead(nodesChecked.get(indexNode).getAddress(), null, seqLength);
         return retVal;
     }
 
