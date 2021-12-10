@@ -10,6 +10,7 @@ import cs321.create.DNASequence;
 public class TreeObject implements Comparable<TreeObject>{
     private DNASequence seq;
     private int frequency;
+    private int seqLength;
 
     /**
      * Constructor for Tree object
@@ -20,6 +21,7 @@ public class TreeObject implements Comparable<TreeObject>{
         // Store the DNASequence
         this.seq = seq;
         frequency = 0;
+        seqLength = seq.toString().length();
     }
 
     /**
@@ -109,5 +111,9 @@ public class TreeObject implements Comparable<TreeObject>{
         }
 
         return sequenceString;
+    }
+
+    public int getSequenceLength(){
+        return seqLength;
     }
 }
