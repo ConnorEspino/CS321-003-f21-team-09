@@ -1,5 +1,8 @@
 package cs321.btree;
 
+import cs321.create.GeneBankCreateBTreeArguments;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.LinkedList;
@@ -12,6 +15,10 @@ public class BTree{
     private int degree;
     private RandomAccessFile file;
     private long address;
+    private int subSeqLength;
+    private boolean useCache;
+    private int deBugLevel;
+    private int cacheSize;
 
     public BTree(int degree, RandomAccessFile file, long address) throws IOException {
         BTree = new BTreeNode[4096];
@@ -24,6 +31,17 @@ public class BTree{
         setRoot(x);
     }
 
+    public BTree(GeneBankCreateBTreeArguments geneBankCreateBTreeArguments) throws FileNotFoundException {
+        degree = geneBankCreateBTreeArguments.degree;
+        subSeqLength = geneBankCreateBTreeArguments.subsequenceLength;
+        deBugLevel = geneBankCreateBTreeArguments.debugLevel;
+        cacheSize = geneBankCreateBTreeArguments.cacheSize;
+        useCache = geneBankCreateBTreeArguments.useCache;
+        String fileName = geneBankCreateBTreeArguments.gbkFileName;
+        RandomAccessFile file1 = new RandomAccessFile(fileName, "rw");
+        file = file1;
+    }
+
     public BTreeNode root() {
         BTreeNode root = BTree[0];
         return root;
@@ -33,22 +51,22 @@ public class BTree{
         BTree[0] = newRoot;
     }
 
-
-    //good?
-    public TreeObject BTreeSearch(BTreeNode TreeNode, TreeObject Key) throws BTreeException, IOException {
-        int i = 1;
-        while((i <= TreeNode.getNumElements()) && Key.getKey() > TreeNode.getElement(i).getKey()){
-            i++;
-        }
-        if (i < TreeNode.getNumElements() && 0 == (Key.compareTo(TreeNode.getElement(i)))) {
-            return (TreeNode.getElement(i));
-        } else if(TreeNode.isLeaf()){
-            return null;
-        } else {
-            BTreeNode nodeReturn = TreeNode.diskRead(TreeNode.getChildAddress(i), null);
-            return BTreeSearch(nodeReturn, Key);
-        }
-    }
+//
+//    //good?
+//    public TreeObject BTreeSearch(BTreeNode TreeNode, TreeObject Key) throws BTreeException, IOException {
+//        int i = 1;
+//        while((i <= TreeNode.getNumElements()) && Key.getKey() > TreeNode.getElement(i).getKey()){
+//            i++;
+//        }
+//        if (i < TreeNode.getNumElements() && 0 == (Key.compareTo(TreeNode.getElement(i)))) {
+//            return (TreeNode.getElement(i));
+//        } else if(TreeNode.isLeaf()){
+//            return null;
+//        } else {
+//            BTreeNode nodeReturn = TreeNode.diskRead(TreeNode.getChildAddress(i), null);
+//            return BTreeSearch(nodeReturn, Key);
+//        }
+//    }
 
     public void BTreeInsert(TreeObject Key) throws BTreeException, IOException {
         BTreeNode r = root();
