@@ -65,6 +65,7 @@ public class BTree{
                 size++;
             }
             r.insertNonFull(Key);
+            r.diskWrite(null);
         }
     }
 
