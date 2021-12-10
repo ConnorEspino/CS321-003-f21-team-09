@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import cs321.create.DNASequence;
+import cs321.create.SequenceUtils;
 import cs321.search.LinkedListCache;
 
 public class BTreeNode {
@@ -18,12 +19,10 @@ public class BTreeNode {
     private int maxChildIndex;
     //Degree of the BTree
     private int degree;
+    //File to read/write to
     private RandomAccessFile file;
     //Address of the BTreeNode
     private long address;
-    LinkedListCache cache;
-    //index for inOrderTraversal
-    private int i = -1;
 
 
     /**
@@ -76,7 +75,7 @@ public class BTreeNode {
      * @throws IOException
      * @throws BTreeException
      */
-    public BTreeNode diskRead(long address, LinkedListCache cache) throws IOException, BTreeException {
+    public BTreeNode diskRead(long address, LinkedListCache cache, int seqLength) throws IOException, BTreeException {
         if (address == 0) return null;
         BTreeNode x  = null;
 
@@ -103,7 +102,7 @@ public class BTreeNode {
         for(int i = 0; i < n; i++){
             long value = file.readLong();
             int freq = file.readInt();
-            TreeObject obj = new TreeObject(new DNASequence(Long.toBinaryString(value)), freq);
+            TreeObject obj = new TreeObject(new DNASequence(SequenceUtils.longToDNAString(value, seqLength)), freq);
             x.array[i] = obj;
         }
 
@@ -294,21 +293,4 @@ public class BTreeNode {
         return retStr;
     }
 
-    public void inOrderTraversal(BTreeNode newNode) throws BTreeException, IOException {
-        //Search starting at the end of the node.
-        for (int i = 0; i < newNode.getNumElements(); i++) {
-            for(int j = 0; j < newNode.getNumChildren(); j++){
-                BTreeNode child = newNode.diskRead(newNode.getChildAddress(j), null);
-                if (child != null){
-                    inOrderTraversal(child);
-
-                }
-            }
-//            newNode.dump();
-            BTreeNode child = newNode.diskRead(newNode.getChildAddress(i), null);
-            child.toString();
-//            child.dump();
-//            inOrderTraversal(child);
-        }
-    }
 }
