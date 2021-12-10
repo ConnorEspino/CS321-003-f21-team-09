@@ -91,7 +91,12 @@ public class GeneBankFileReader {
         
         //Check if the scanner has reached the end of the readable DNA sequence
         if(nextChar.equals("/")){
-            return null;
+            //Places the scanner at the start of the next DNA Sequence if it exists
+            try{
+                while(!scan.nextLine().equals("ORIGIN      "));
+            }catch(NoSuchElementException e){
+                    return null;
+            }
         }
 
         //If the next character is not a DNA base then try adding the next character
@@ -99,7 +104,12 @@ public class GeneBankFileReader {
             nextChar = scan.next();
             //Check if the scanner has reached the end of the readable DNA sequence
             if(nextChar.equals("/")){
-                return null;
+                //Places the scanner at the start of the next DNA Sequence if it exists
+                try{
+                    while(!scan.nextLine().equals("ORIGIN      "));
+                }catch(NoSuchElementException e){
+                    return null;
+                }
             }
         }
         return nextChar;
