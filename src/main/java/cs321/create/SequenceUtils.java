@@ -65,10 +65,17 @@ public class SequenceUtils{
     /**
      * Returns the complement of the given long sequence
      * @param sequence The DNA sequence as a binary long
+     * @param seqLength The number of bits that are used as part of the Sequence
      * @return long The complement of the given DNA long sequence
      */
-    public static long getComplement(long sequence) {//, int seqLength piazza code included this, but it is unused
-        return ~sequence;
+    public static long getComplement(long sequence, int seqLength) {
+        long retSeq = ~sequence;
+        long andSeq = 0;
+        for(int i = 0; i < seqLength; i++){
+            andSeq = andSeq << 1;
+            andSeq++;
+        }
+        return retSeq & andSeq;
     }
 
 }
