@@ -56,7 +56,7 @@ public class GeneBankSearchBTree {
         //Search file for frequency of each query in the query file
         while(queryScan.hasNextLine()){
             String line = queryScan.nextLine();
-            System.out.println(line + ": " + find(x, new DNASequence(line).getLong()));
+            System.out.println(find(x, new DNASequence(line).getLong()) + " " + line );
         }
 
     }
