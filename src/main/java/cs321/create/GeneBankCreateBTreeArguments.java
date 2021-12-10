@@ -1,13 +1,12 @@
 package cs321.create;
 
-public class GeneBankCreateBTreeArguments
-{
-    private final boolean useCache;
-    private final int degree;
-    private final String gbkFileName;
-    private final int subsequenceLength;
-    private final int cacheSize;
-    private final int debugLevel;
+public class GeneBankCreateBTreeArguments {
+    public final boolean useCache;
+    public final int degree;
+    public final String gbkFileName;
+    public final int subsequenceLength;
+    public final int cacheSize;
+    public final int debugLevel;
 
     public GeneBankCreateBTreeArguments(boolean useCache, int degree, String gbkFileName, int subsequenceLength, int cacheSize, int debugLevel)
     {
