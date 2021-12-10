@@ -22,7 +22,7 @@ public class GeneBankCreateBTree {
             createdBTree.BTreeInsert(sequence);
             insert = reader.getNextSequence();
         }
-
+        createdBTree.inOrderTraversalPrint();
     }
 
     private static GeneBankCreateBTreeArguments parseArgumentsAndHandleExceptions(String[] args) {
