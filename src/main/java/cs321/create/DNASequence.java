@@ -4,7 +4,7 @@ package cs321.create;
  * A class used for holding the inputed DNA sequence as integer values.
  * 
  * @author Ken R.
- * 
+ * @author Connor Espino
  */
 public class DNASequence {
     private long list;

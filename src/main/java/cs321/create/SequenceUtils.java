@@ -2,6 +2,8 @@ package cs321.create;
 
 /**
  * Utility methods dealing with DNA sequences and its compact representation as long variables.
+ * 
+ * @author Connor Espino
  */
 public class SequenceUtils{
 
