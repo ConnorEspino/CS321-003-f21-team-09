@@ -7,6 +7,12 @@ import cs321.create.DNASequence;
 import cs321.create.SequenceUtils;
 import cs321.search.LinkedListCache;
 
+/**
+ * A class to create a BTreeNode object, as well as providing methods to read and write to the disk.
+ * 
+ * @author Connor Espino
+ * @author Jacob Swierstra
+ */
 public class BTreeNode {
     // A boolean which is true if this node is a leaf and otherwise false
     private boolean leaf;
