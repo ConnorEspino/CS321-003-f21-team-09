@@ -6,6 +6,11 @@ import java.util.Scanner;
 import cs321.btree.BTreeNode;
 import cs321.create.DNASequence;
 
+/**
+ * Allows the user to search through a BTree and return the frequency of each query
+ * 
+ * @author Connor Espino
+ */
 public class GeneBankSearchBTree {
     private GeneBankSearchBTreeArguments arguments;
 
