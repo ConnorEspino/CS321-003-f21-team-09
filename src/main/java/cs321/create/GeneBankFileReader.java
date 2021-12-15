@@ -4,6 +4,11 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+ * A class for reading DNA Sequences of a certain length from a .gbk file 
+ * 
+ * @author Connor Espino
+ */
 public class GeneBankFileReader {
     private File file;
     private Scanner scan;
