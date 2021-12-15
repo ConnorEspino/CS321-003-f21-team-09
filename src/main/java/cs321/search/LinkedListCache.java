@@ -6,9 +6,8 @@ import java.util.NoSuchElementException;
 import cs321.btree.BTreeNode;
 
 /**
- * Project 1
- * 
  * Implementation of Cache Interface with methods for Cache management
+ * Modified for BTree project
  * 
  * @author Connor Espino
  * @version Fall 2021
