@@ -1,0 +1,39 @@
+Name: Connor Espino, Jacob Swierstra, Ken Reiner
+
+
+Grade: 120/200
+
+Rubric for the BTree group project
+
+Comments:
+
+-Submission
+	-Submitted all required files: ok
+	-Submitted unnecessary files (such as .class files, data files): ok
+
+Documentation: [20 points]
+	-README-submission.md [10 points] 
+		-README-submission.md file has appropriate sections:  ok
+	-Appropriate Javadoc and inline comments [10 points]: ok
+
+Code design and style:  ok
+
+Functionality: [140 points]
+	-GeneBankCreateBtree functionality: [70 points]
+		-Not fully functional -50
+	-GeneBankSearchBtree functionality: [20 points]
+		-Not fully functional -10
+
+	-SQLite Database creation and search: [20 points]
+		-ok
+	-Used level-1 Cache to improve speed: [20 points]
+		-Not possible to test -10
+	-Used AWS to run tests: [10 points] -10
+
+Teamwork: [40 points]
+	-Filled out weekly progress reports/surveys x 4: [10 points] ok
+	-Effective scrum process: [10 points] ok
+	-Individual contribution to the project: [20 points] ok
+
+
+
